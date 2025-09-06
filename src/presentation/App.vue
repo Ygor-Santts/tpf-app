@@ -1,21 +1,17 @@
 <script setup lang="ts">
-import { APP_NAME } from '@shared/constants'
+import { IonApp, IonRouterOutlet, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/vue'
+import { homeOutline, albumsOutline, locationOutline, searchOutline } from 'ionicons/icons'
 </script>
-
 <template>
-  <div>
-    <header class="border-b bg-white">
-      <div class="mx-auto max-w-6xl flex items-center justify-between p-4">
-        <h1 class="font-semibold">{{ APP_NAME }}</h1>
-        <nav class="flex gap-4">
-          <RouterLink to="/dashboard" class="hover:underline">Dashboard</RouterLink>
-          <RouterLink to="/health" class="hover:underline">Health</RouterLink>
-          <RouterLink to="/login" class="hover:underline">Login</RouterLink>
-        </nav>
-      </div>
-    </header>
-    <main class="mx-auto max-w-6xl p-4">
-      <RouterView />
-    </main>
-  </div>
+  <IonApp>
+    <IonTabs>
+      <IonRouterOutlet />
+      <IonTabBar slot="bottom">
+        <IonTabButton tab="home" href="/tabs/home"><IonIcon :icon="homeOutline" /><IonLabel>Home</IonLabel></IonTabButton>
+        <IonTabButton tab="categories" href="/tabs/categories"><IonIcon :icon="albumsOutline" /><IonLabel>Categories</IonLabel></IonTabButton>
+        <IonTabButton tab="locations" href="/tabs/states"><IonIcon :icon="locationOutline" /><IonLabel>Locations</IonLabel></IonTabButton>
+        <IonTabButton tab="search" href="/tabs/workers"><IonIcon :icon="searchOutline" /><IonLabel>Search</IonLabel></IonTabButton>
+      </IonTabBar>
+    </IonTabs>
+  </IonApp>
 </template>
