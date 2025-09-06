@@ -21,5 +21,12 @@ const routes: RouteRecordRaw[] = [
   ]}
 ]
 const router = createRouter({ history: createWebHistory(), routes })
-router.beforeEach((to, _from, next) => { const isPublic = Boolean(to.meta.public); const token = localStorage.getItem('tpf_token'); if (!isPublic && !token) return next('/login'); next() })
+
+router.beforeEach((to, _from, next) => {
+  const isPublic = Boolean(to.meta.public)
+  const token = localStorage.getItem('tpf_token')
+  if (!isPublic && !token) return next('/login')
+  next()
+})
+
 export default router

@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem } from '@ionic/vue'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
-const tax = useTaxonomyStore(); onMounted(() => tax.loadStates())
+const tax = useTaxonomyStore()
+onMounted(() => tax.loadStates())
 </script>
+
 <template>
-  <IonPage>
-    <IonHeader translucent><IonToolbar><IonTitle>States</IonTitle></IonToolbar></IonHeader>
-    <IonContent><IonList><IonItem v-for="s in tax.states" :key="s.code" :routerLink="`/tabs/states/${s.code}/cities`">{{ s.name }}</IonItem></IonList></IonContent>
-  </IonPage>
+  <section class="grid gap-3">
+    <h2 class="text-lg font-semibold">States</h2>
+    <RouterLink v-for="s in tax.states" :key="s.code" :to="`/tabs/states/${s.code}/cities`">
+      <div class="rounded-2xl border p-4 shadow-card">{{ s.name }}</div>
+    </RouterLink>
+  </section>
 </template>

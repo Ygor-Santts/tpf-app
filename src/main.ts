@@ -14,4 +14,5 @@ import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
 import { IonicVue } from '@ionic/vue'
 import './style.css'
-createApp(App).use(IonicVue).use(createPinia()).use(router).mount('#app')
+
+createApp(App).use(createPinia()).use(router).mount('#app')
