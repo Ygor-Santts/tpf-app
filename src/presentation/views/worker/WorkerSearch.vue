@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
 import { searchWorkers, type WorkerSearchParams } from '@infra/services/worker.service'
 import WorkerCard from '@ui/components/WorkerCard.vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const tax = useTaxonomyStore()
 const name = ref('')
@@ -43,21 +45,21 @@ async function run(pageNum=1){
 
 <template>
   <section class="grid gap-4">
-    <h2 class="text-lg font-semibold">Find Professionals</h2>
+    <h2 class="text-lg font-semibold">{{ t('workers.findProfessionals') }}</h2>
 
     <div class="grid gap-2">
-      <input v-model="name" placeholder="Name (optional)" class="border rounded-xl p-3" />
+      <input v-model="name" :placeholder="t('workers.nameOptional')" class="border rounded-xl p-3" />
 
       <div class="grid gap-1">
-        <label class="text-sm text-gray-600">Category</label>
+        <label class="text-sm text-gray-600">{{ t('auth.category') }}</label>
         <select v-model="selectedCategory" @change="onCategoryChange" class="border rounded-xl p-3">
-          <option :value="null">All</option>
+          <option :value="null">{{ t('common.all') }}</option>
           <option v-for="c in tax.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
         </select>
       </div>
 
       <div v-if="selectedCategory" class="grid gap-2">
-        <label class="text-sm text-gray-600">Occupations</label>
+        <label class="text-sm text-gray-600">{{ t('auth.occupations') }}</label>
         <div class="flex flex-wrap gap-2">
           <button
             v-for="o in tax.occupationsByCategory[selectedCategory] || []"
@@ -73,15 +75,15 @@ async function run(pageNum=1){
       </div>
 
       <div class="grid gap-1">
-        <label class="text-sm text-gray-600">State</label>
+        <label class="text-sm text-gray-600">{{ t('auth.state') }}</label>
         <select v-model="selectedState" @change="onStateChange" class="border rounded-xl p-3">
-          <option value="">All</option>
+          <option value="">{{ t('common.all') }}</option>
           <option v-for="s in tax.states" :key="s.code" :value="s.code">{{ s.name }}</option>
         </select>
       </div>
 
       <div v-if="selectedState" class="grid gap-2">
-        <label class="text-sm text-gray-600">Cities</label>
+        <label class="text-sm text-gray-600">{{ t('auth.cities') }}</label>
         <div class="flex flex-wrap gap-2">
           <button
             v-for="c in tax.citiesByState[selectedState] || []"
@@ -97,13 +99,13 @@ async function run(pageNum=1){
       </div>
 
       <button @click="run(1)" :disabled="loading" class="rounded-xl p-3 bg-black text-white">
-        {{ loading ? 'Searching...' : 'Search' }}
+        {{ loading ? t('common.find') + '...' : t('common.find') }}
       </button>
       <p v-if="error" class="text-red-600 text-sm">{{ error }}</p>
     </div>
 
     <div v-if="results">
-      <p class="text-sm text-gray-600">Total: {{ results.total }}</p>
+      <p class="text-sm text-gray-600">{{ t('workers.total') }}: {{ results.total }}</p>
       <div class="grid gap-3 mt-2">
         <WorkerCard
           v-for="w in results.data"
@@ -114,9 +116,9 @@ async function run(pageNum=1){
         />
       </div>
       <div class="flex justify-between items-center mt-3">
-        <button class="px-3 py-2 border rounded-xl" :disabled="page<=1" @click="run(page-1)">Previous</button>
+        <button class="px-3 py-2 border rounded-xl" :disabled="page<=1" @click="run(page-1)">{{ t('common.previous') }}</button>
         <div class="text-sm">Page {{ page }}</div>
-        <button class="px-3 py-2 border rounded-xl" :disabled="results.data.length < limit" @click="run(page+1)">Next</button>
+        <button class="px-3 py-2 border rounded-xl" :disabled="results.data.length < limit" @click="run(page+1)">{{ t('common.next') }}</button>
       </div>
     </div>
   </section>

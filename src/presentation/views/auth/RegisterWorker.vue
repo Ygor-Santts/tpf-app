@@ -2,6 +2,8 @@
 import { reactive, onMounted } from 'vue'
 import { useAuthStore } from '@app/stores/auth'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const auth = useAuthStore(); const tax = useTaxonomyStore()
 const form = reactive({ name:'', email:'', password:'', phone:'', jobCategoryId: 0, jobOccupationIds: [] as number[], stateCode:'', operationCitiesIds: [] as number[] })
 onMounted(async () => { await tax.loadCategories(); await tax.loadStates() })
@@ -13,22 +15,22 @@ async function submit(){ await auth.registerWorker({ name: form.name, email: for
 
 <template>
   <div class="grid gap-4">
-    <h2 class="text-lg font-semibold">Worker Registration</h2>
-    <input v-model="form.name" placeholder="Full name" class="border rounded-xl p-3" />
-    <input v-model="form.email" type="email" placeholder="Email" class="border rounded-xl p-3" />
-    <input v-model="form.password" type="password" placeholder="Password" class="border rounded-xl p-3" />
-    <input v-model="form.phone" placeholder="Phone (+55...)" class="border rounded-xl p-3" />
+    <h2 class="text-lg font-semibold">{{ t('auth.registerWorker') }}</h2>
+    <input v-model="form.name" :placeholder="t('auth.fullName')" class="border rounded-xl p-3" />
+    <input v-model="form.email" type="email" :placeholder="t('auth.email')" class="border rounded-xl p-3" />
+    <input v-model="form.password" type="password" :placeholder="t('auth.password')" class="border rounded-xl p-3" />
+    <input v-model="form.phone" :placeholder="t('auth.phone')" class="border rounded-xl p-3" />
 
     <div class="grid gap-1">
-      <label class="text-sm text-gray-600">Category</label>
+      <label class="text-sm text-gray-600">{{ t('auth.category') }}</label>
       <select v-model.number="form.jobCategoryId" @change="onCategoryChange" class="border rounded-xl p-3">
-        <option :value="0" disabled>Select...</option>
+        <option :value="0" disabled>{{ t('auth.select') }}</option>
         <option v-for="c in tax.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
       </select>
     </div>
 
     <div v-if="form.jobCategoryId" class="grid gap-1">
-      <label class="text-sm text-gray-600">Occupations</label>
+      <label class="text-sm text-gray-600">{{ t('auth.occupations') }}</label>
       <div class="flex flex-wrap gap-2">
         <button v-for="o in tax.occupationsByCategory[form.jobCategoryId] || []" :key="o.id" type="button"
           class="px-3 py-2 rounded-full border"
@@ -38,15 +40,15 @@ async function submit(){ await auth.registerWorker({ name: form.name, email: for
     </div>
 
     <div class="grid gap-1">
-      <label class="text-sm text-gray-600">State</label>
+      <label class="text-sm text-gray-600">{{ t('auth.state') }}</label>
       <select v-model="form.stateCode" @change="onStateChange" class="border rounded-xl p-3">
-        <option value="" disabled>Select...</option>
+        <option value="" disabled>{{ t('auth.select') }}</option>
         <option v-for="s in tax.states" :key="s.code" :value="s.code">{{ s.name }}</option>
       </select>
     </div>
 
     <div v-if="form.stateCode" class="grid gap-1">
-      <label class="text-sm text-gray-600">Cities</label>
+      <label class="text-sm text-gray-600">{{ t('auth.cities') }}</label>
       <div class="flex flex-wrap gap-2">
         <button v-for="c in tax.citiesByState[form.stateCode] || []" :key="c.id" type="button"
           class="px-3 py-2 rounded-full border"
@@ -56,7 +58,7 @@ async function submit(){ await auth.registerWorker({ name: form.name, email: for
     </div>
 
     <button :disabled="auth.loading" @click="submit" class="rounded-xl p-3 bg-black text-white">
-      {{ auth.loading ? 'Sending...' : 'Register' }}
+      {{ auth.loading ? t('auth.sending') : t('auth.register') }}
     </button>
     <p v-if="auth.error" class="text-red-600 text-sm">{{ auth.error }}</p>
   </div>

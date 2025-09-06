@@ -18,7 +18,7 @@ function toQuery(params: WorkerSearchParams): string {
   if (params.limit) q.set('limit', String(params.limit))
   if (params.operationCitiesIds?.length) q.set('operationCitiesIds', params.operationCitiesIds.join(','))
   if (params.jobOccupationIds?.length) q.set('jobOccupationIds', params.jobOccupationIds.join(','))
-  // compat com backend: 'jobCategoriyIds' (typo)
+  // compat com backend: 'jobCategoriyIds' (typo conhecido)
   if (params.jobCategoryIds?.length) q.set('jobCategoriyIds', params.jobCategoryIds.join(','))
   return q.toString()
 }

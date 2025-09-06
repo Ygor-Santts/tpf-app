@@ -12,12 +12,11 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@ionic/vue": "^7.8.6",
-    "@ionic/vue-router": "^7.8.6",
-    "ionicons": "^7.2.1",
+    "@iconify/vue": "^4.1.1",
     "axios": "^1.7.2",
     "pinia": "^2.1.7",
     "vue": "^3.4.30",
+    "vue-i18n": "^9.10.2",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
