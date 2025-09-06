@@ -4,10 +4,7 @@ import path from 'node:path'
 
 export default defineConfig({
   plugins: [vue()],
-  server: {
-    port: 5173,
-    host: true
-  },
+  server: { host: true, port: 5173 },
   resolve: {
     alias: {
       '@app': path.resolve(__dirname, 'src/application'),
