@@ -9,7 +9,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "types": ["node"],
     "baseUrl": ".",
     "paths": {
       "@app/*": ["src/application/*"],
@@ -19,5 +18,5 @@
       "@ui/*": ["src/presentation/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": ["src/**/*.ts", "src/**/*.vue"]
 }

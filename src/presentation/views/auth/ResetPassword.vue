@@ -16,7 +16,6 @@ async function submit(){
   finally { state.loading = false }
 }
 </script>
-
 <template>
   <div class="max-w-xs mx-auto grid gap-4">
     <h2 class="text-lg font-semibold">{{ t('auth.reset') }}</h2>
@@ -24,7 +23,7 @@ async function submit(){
       <input v-model="form.password" type="password" :placeholder="t('auth.newPassword')" class="border rounded-xl p-3" required />
       <input v-model="form.confirm" type="password" :placeholder="t('auth.confirmPassword')" class="border rounded-xl p-3" required />
       <p v-if="form.password && form.confirm && form.password !== form.confirm" class="text-red-600 text-xs">{{ t('auth.passwordsMismatch') }}</p>
-      <button :disabled="state.loading || (form.password !== form.confirm)" class="rounded-xl p-3 bg-black text-white">
+      <button :disabled="state.loading || (form.password !== form.confirm)" class="rounded-xl p-3 bg-black text-white cursor-pointer">
         {{ state.loading ? t('auth.reset') + '...' : t('auth.reset') }}
       </button>
       <p v-if="state.message" class="text-green-600 text-sm">{{ state.message }}</p>
