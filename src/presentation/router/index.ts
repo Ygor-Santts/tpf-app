@@ -16,14 +16,17 @@ const routes: RouteRecordRaw[] = [
   { path: '/register-worker', component: RegisterWorker, meta: { public: true } },
   { path: '/forgot-password', component: ForgotPassword, meta: { public: true } },
   { path: '/reset-password', component: ResetPassword, meta: { public: true } },
-  { path: '/tabs', children: [
-    { path: 'home', component: Home, meta: { public: true } },
-    { path: 'categories', component: Categories },
-    { path: 'categories/:categoryId/occupations', component: Occupations, props: true },
-    { path: 'states', component: States },
-    { path: 'states/:code/cities', component: Cities, props: true },
-    { path: 'workers', component: WorkerSearch }
-  ]}
+  {
+    path: '/tabs',
+    children: [
+      { path: 'home', component: Home, meta: { public: true } },
+      { path: 'categories', component: Categories },
+      { path: 'categories/:categoryId/occupations', component: Occupations, props: true },
+      { path: 'states', component: States },
+      { path: 'states/:code/cities', component: Cities, props: true },
+      { path: 'workers', component: WorkerSearch },
+    ],
+  },
 ]
 
 const router = createRouter({ history: createWebHistory(), routes })
