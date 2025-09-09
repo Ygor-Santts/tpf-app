@@ -11,9 +11,7 @@ async function submit(){ loading.value = true; message.value = null; try { await
     <h2 class="text-lg font-semibold">{{ t('auth.forgot') }}</h2>
     <form @submit.prevent="submit" class="grid gap-3">
       <input v-model="email" type="email" :placeholder="t('auth.email')" class="border rounded-xl p-3" required />
-      <button :disabled="loading" class="rounded-xl p-3 bg-black text-white cursor-pointer">
-        {{ loading ? t('auth.sendInstructions') + '...' : t('auth.sendInstructions') }}
-      </button>
+      <button :disabled="loading" class="rounded-xl p-3 bg-black text-white cursor-pointer">{{ loading ? t('auth.sendInstructions') + '...' : t('auth.sendInstructions') }}</button>
       <p v-if="message" class="text-green-600 text-sm">{{ message }}</p>
     </form>
   </div>

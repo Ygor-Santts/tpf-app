@@ -21,19 +21,42 @@ const { t, locale } = useI18n()
       <RouterView />
     </main>
     <nav class="sticky bottom-0 z-10 bg-white border-t">
-      <div class="max-w-screen-sm mx-auto grid grid-cols-4 text-[11px] sm:text-sm">
-        <RouterLink to="/tabs/home" class="p-3 text-center hover:bg-gray-50 flex flex-col items-center gap-1 cursor-pointer">
-          <Icon icon="mdi:home-outline" class="text-xl" /><span>{{ t('app.tabs.home') }}</span>
-        </RouterLink>
-        <RouterLink to="/tabs/categories" class="p-3 text-center hover:bg-gray-50 flex flex-col items-center gap-1 cursor-pointer">
-          <Icon icon="mdi:book-open-variant-outline" class="text-xl" /><span>{{ t('app.tabs.categories') }}</span>
-        </RouterLink>
-        <RouterLink to="/tabs/states" class="p-3 text-center hover:bg-gray-50 flex flex-col items-center gap-1 cursor-pointer">
-          <Icon icon="mdi:map-marker-outline" class="text-xl" /><span>{{ t('app.tabs.locations') }}</span>
-        </RouterLink>
-        <RouterLink to="/tabs/workers" class="p-3 text-center hover:bg-gray-50 flex flex-col items-center gap-1 cursor-pointer">
-          <Icon icon="mdi:magnify" class="text-xl" /><span>{{ t('app.tabs.search') }}</span>
-        </RouterLink>
+      <div class="max-w-screen-sm mx-auto grid grid-cols-5 text-[11px] sm:text-sm">
+        <RouterLink
+          to="/tabs/home"
+          class="p-3 text-center hover:bg-gray-50 flex flex-col items-center gap-1 cursor-pointer"
+          ><Icon icon="mdi:home-outline" class="text-xl" /><span>{{
+            t('app.tabs.home')
+          }}</span></RouterLink
+        >
+        <RouterLink
+          to="/tabs/categories"
+          class="p-3 text-center hover:bg-gray-50 flex flex-col items-center gap-1 cursor-pointer"
+          ><Icon icon="mdi:book-open-variant-outline" class="text-xl" /><span>{{
+            t('app.tabs.categories')
+          }}</span></RouterLink
+        >
+        <RouterLink
+          to="/tabs/states"
+          class="p-3 text-center hover:bg-gray-50 flex flex-col items-center gap-1 cursor-pointer"
+          ><Icon icon="mdi:map-marker-outline" class="text-xl" /><span>{{
+            t('app.tabs.locations')
+          }}</span></RouterLink
+        >
+        <RouterLink
+          to="/tabs/workers"
+          class="p-3 text-center hover:bg-gray-50 flex flex-col items-center gap-1 cursor-pointer"
+          ><Icon icon="mdi:magnify" class="text-xl" /><span>{{
+            t('app.tabs.search')
+          }}</span></RouterLink
+        >
+        <RouterLink
+          to="/tabs/dashboard"
+          class="p-3 text-center hover:bg-gray-50 flex flex-col items-center gap-1 cursor-pointer"
+          ><Icon icon="mdi:view-dashboard-outline" class="text-xl" /><span>{{
+            t('dashboard.tab')
+          }}</span></RouterLink
+        >
       </div>
     </nav>
   </div>

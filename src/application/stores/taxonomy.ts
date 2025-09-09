@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { getJobCategories, getOccupationsByCategory } from '@infra/services/job.service'
 import { getStates, getCitiesByState } from '@infra/services/locales.service'
 import type { JobCategory, JobOccupation, State, City } from '@domain/marketplace'
-
 export const useTaxonomyStore = defineStore('taxonomy', {
   state: () => ({
     categories: [] as JobCategory[],

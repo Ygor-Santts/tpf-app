@@ -14,9 +14,7 @@ async function submit() { if (await auth.login(form)) router.replace('/tabs/home
     <form @submit.prevent="submit" class="grid gap-3">
       <input v-model="form.email" type="email" :placeholder="t('auth.email')" class="border rounded-xl p-3" required />
       <input v-model="form.password" type="password" :placeholder="t('auth.password')" class="border rounded-xl p-3" required />
-      <button :disabled="auth.loading" class="rounded-xl p-3 bg-black text-white cursor-pointer">
-        {{ auth.loading ? t('auth.signingIn') : t('auth.login') }}
-      </button>
+      <button :disabled="auth.loading" class="rounded-xl p-3 bg-black text-white cursor-pointer">{{ auth.loading ? t('auth.signingIn') : t('auth.login') }}</button>
       <div class="flex justify-between text-xs">
         <RouterLink to="/forgot-password" class="underline cursor-pointer">{{ t('auth.forgot') }}</RouterLink>
         <RouterLink to="/register-worker" class="underline cursor-pointer">{{ t('auth.registerWorker') }}</RouterLink>

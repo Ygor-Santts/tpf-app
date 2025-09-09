@@ -1,9 +1,86 @@
 {
-  "app": { "name": "Trampo Fácil", "tabs": { "home": "Home", "categories": "Categories", "locations": "Locations", "search": "Search" }, "language": "Language" },
-  "common": { "searchServices": "Search for services...", "showAll": "Show all", "seeAllLocations": "See All Locations", "browse": "Browse", "go": "Go", "find": "Find", "previous": "Previous", "next": "Next", "all": "All" },
-  "home": { "quick": "Quick", "quickSubtitle": "Find trusted professionals easily.", "join": "Join our network", "imWorker": "I am a Worker", "exploreCategories": "Explore Categories", "browseAvailable": "Browse available", "locations": "Locations", "viewMore": "View more", "trustedWorkers": "Trusted Workers", "serviceAreas": "Service Areas" },
-  "auth": { "login": "Login", "email": "Email", "password": "Password", "signingIn": "Signing in...", "registerWorker": "Worker Registration", "fullName": "Full name", "phone": "Phone", "category": "Category", "select": "Select...", "occupations": "Occupations", "state": "State", "cities": "Cities", "sending": "Sending...", "register": "Register", "forgot": "Forgot my password", "sendInstructions": "Send instructions", "emailSent": "If the email exists, we sent reset instructions.", "reset": "Reset password", "newPassword": "New password", "confirmPassword": "Confirm password", "passwordsMismatch": "Passwords do not match" },
-  "marketplace": { "categories": "Categories", "occupations": "Occupations" },
-  "locales": { "states": "States", "cities": "Cities" },
-  "workers": { "findProfessionals": "Find Professionals", "nameOptional": "Name (optional)", "total": "Total" }
+  "app": {
+    "name": "Trampo Fácil",
+    "tabs": {
+      "home": "Home",
+      "categories": "Categories",
+      "locations": "Locations",
+      "search": "Search",
+      "dashboard": "Dashboard"
+    },
+    "language": "Language"
+  },
+  "common": {
+    "searchServices": "Search for services...",
+    "showAll": "Show all",
+    "seeAllLocations": "See All Locations",
+    "browse": "Browse",
+    "go": "Go",
+    "find": "Find",
+    "previous": "Previous",
+    "next": "Next",
+    "all": "All"
+  },
+  "home": {
+    "quick": "Quick",
+    "quickSubtitle": "Find trusted professionals easily.",
+    "join": "Join our network",
+    "imWorker": "I am a Worker",
+    "exploreCategories": "Explore Categories",
+    "browseAvailable": "Browse available",
+    "locations": "Locations",
+    "viewMore": "View more",
+    "trustedWorkers": "Trusted Workers",
+    "serviceAreas": "Service Areas"
+  },
+  "auth": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "signingIn": "Signing in...",
+    "registerWorker": "Worker Registration",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "category": "Category",
+    "select": "Select...",
+    "occupations": "Occupations",
+    "state": "State",
+    "cities": "Cities",
+    "sending": "Sending...",
+    "register": "Register",
+    "forgot": "Forgot my password",
+    "sendInstructions": "Send instructions",
+    "emailSent": "If the email exists, we sent reset instructions.",
+    "reset": "Reset password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordsMismatch": "Passwords do not match"
+  },
+  "marketplace": {
+    "categories": "Categories",
+    "occupations": "Occupations"
+  },
+  "locales": {
+    "states": "States",
+    "cities": "Cities"
+  },
+  "workers": {
+    "findProfessionals": "Find Professionals",
+    "nameOptional": "Name (optional)",
+    "total": "Total"
+  },
+  "dashboard": {
+    "tab": "Dashboard",
+    "from": "From",
+    "to": "To",
+    "apply": "Apply",
+    "paidAmount": "Amount paid",
+    "unpaidAmount": "Amount unpaid",
+    "paidCount": "{{n}} paid",
+    "unpaidCount": "{{n}} unpaid",
+    "paidVsUnpaid": "Paid vs Unpaid",
+    "paidShort": "paid",
+    "recentPaid": "Recent paid",
+    "recentUnpaid": "Recent unpaid"
+  }
 }
