@@ -1,86 +1,9 @@
 {
-  "app": {
-    "name": "Trampo Fácil",
-    "tabs": {
-      "home": "Início",
-      "categories": "Categorias",
-      "locations": "Locais",
-      "search": "Buscar",
-      "dashboard": "Dashboard"
-    },
-    "language": "Idioma"
-  },
-  "common": {
-    "searchServices": "Buscar por serviços...",
-    "showAll": "Ver tudo",
-    "seeAllLocations": "Ver todos os locais",
-    "browse": "Explorar",
-    "go": "Ir",
-    "find": "Encontrar",
-    "previous": "Anterior",
-    "next": "Próxima",
-    "all": "Todos"
-  },
-  "home": {
-    "quick": "Rápido",
-    "quickSubtitle": "Encontre profissionais de confiança com facilidade.",
-    "join": "Entre para nossa rede",
-    "imWorker": "Sou Trabalhador",
-    "exploreCategories": "Explorar Categorias",
-    "browseAvailable": "Ver disponíveis",
-    "locations": "Locais",
-    "viewMore": "Ver mais",
-    "trustedWorkers": "Trabalhadores confiáveis",
-    "serviceAreas": "Áreas de serviço"
-  },
-  "auth": {
-    "login": "Entrar",
-    "email": "E-mail",
-    "password": "Senha",
-    "signingIn": "Entrando...",
-    "registerWorker": "Cadastro de Trabalhador",
-    "fullName": "Nome completo",
-    "phone": "Telefone",
-    "category": "Categoria",
-    "select": "Selecionar...",
-    "occupations": "Ocupações",
-    "state": "Estado",
-    "cities": "Cidades",
-    "sending": "Enviando...",
-    "register": "Cadastrar",
-    "forgot": "Esqueci minha senha",
-    "sendInstructions": "Enviar instruções",
-    "emailSent": "Se o e-mail existir, enviaremos as instruções.",
-    "reset": "Redefinir senha",
-    "newPassword": "Nova senha",
-    "confirmPassword": "Confirmar senha",
-    "passwordsMismatch": "As senhas não coincidem"
-  },
-  "marketplace": {
-    "categories": "Categorias",
-    "occupations": "Ocupações"
-  },
-  "locales": {
-    "states": "Estados",
-    "cities": "Cidades"
-  },
-  "workers": {
-    "findProfessionals": "Encontrar Profissionais",
-    "nameOptional": "Nome (opcional)",
-    "total": "Total"
-  },
-  "dashboard": {
-    "tab": "Dashboard",
-    "from": "De",
-    "to": "Até",
-    "apply": "Aplicar",
-    "paidAmount": "Total pago",
-    "unpaidAmount": "Total em aberto",
-    "paidCount": "{{n}} pagos",
-    "unpaidCount": "{{n}} em aberto",
-    "paidVsUnpaid": "Pago x Não pago",
-    "paidShort": "pago",
-    "recentPaid": "Pagos recentes",
-    "recentUnpaid": "Pendências recentes"
-  }
+  "app": { "name": "Trampo Fácil", "tabs": { "home": "Início", "categories": "Categorias", "locations": "Locais", "search": "Buscar" }, "language": "Idioma" },
+  "common": { "searchServices": "Buscar por serviços...", "showAll": "Ver tudo", "seeAllLocations": "Ver todos os locais", "browse": "Explorar", "go": "Ir", "find": "Encontrar", "previous": "Anterior", "next": "Próxima", "all": "Todos" },
+  "home": { "quick": "Rápido", "quickSubtitle": "Encontre profissionais de confiança com facilidade.", "join": "Entre para nossa rede", "imWorker": "Sou Trabalhador", "exploreCategories": "Explorar Categorias", "browseAvailable": "Ver disponíveis", "locations": "Locais", "viewMore": "Ver mais", "trustedWorkers": "Trabalhadores confiáveis", "serviceAreas": "Áreas de serviço" },
+  "auth": { "login": "Entrar", "email": "E-mail", "password": "Senha", "signingIn": "Entrando...", "registerWorker": "Cadastro de Trabalhador", "fullName": "Nome completo", "phone": "Telefone", "category": "Categoria", "select": "Selecionar...", "occupations": "Ocupações", "state": "Estado", "cities": "Cidades", "sending": "Enviando...", "register": "Cadastrar", "forgot": "Esqueci minha senha", "sendInstructions": "Enviar instruções", "emailSent": "Se o e-mail existir, enviaremos as instruções.", "reset": "Redefinir senha", "newPassword": "Nova senha", "confirmPassword": "Confirmar senha", "passwordsMismatch": "As senhas não coincidem" },
+  "marketplace": { "categories": "Categorias", "occupations": "Ocupações" },
+  "locales": { "states": "Estados", "cities": "Cidades" },
+  "workers": { "findProfessionals": "Encontrar Profissionais", "nameOptional": "Nome (opcional)", "total": "Total" }
 }
