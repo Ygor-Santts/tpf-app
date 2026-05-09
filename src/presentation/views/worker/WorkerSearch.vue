@@ -16,6 +16,7 @@ const selectedCategory = ref<number | null>(null)
 const selectedOccupationIds = ref<number[]>([])
 const selectedState = ref<string>('')
 const selectedCityIds = ref<number[]>([])
+const minRating = ref<number | null>(null)
 const page = ref(1)
 const limit = ref(10)
 const loading = ref(false)
@@ -59,6 +60,7 @@ async function run(pageNum = 1) {
       jobCategoryIds: selectedCategory.value ? [selectedCategory.value] : undefined,
       jobOccupationIds: selectedOccupationIds.value.length ? selectedOccupationIds.value : undefined,
       operationCitiesIds: selectedCityIds.value.length ? selectedCityIds.value : undefined,
+      minRating: minRating.value ?? undefined,
     }
     results.value = await searchWorkers(params)
   } catch (e: any) {
@@ -74,10 +76,11 @@ function clearFilters() {
   selectedState.value = ''
   selectedCityIds.value = []
   name.value = ''
+  minRating.value = null
 }
 
 const hasFilters = computed(() =>
-  name.value || selectedCategory.value || selectedOccupationIds.value.length || selectedState.value || selectedCityIds.value.length
+  name.value || selectedCategory.value || selectedOccupationIds.value.length || selectedState.value || selectedCityIds.value.length || minRating.value
 )
 
 const totalPages = computed(() => results.value ? Math.ceil(results.value.total / limit.value) : 0)
@@ -180,6 +183,20 @@ function workerCities(w: any): string[] {
             </div>
           </div>
 
+          <div class="grid gap-1.5">
+            <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">Avaliação mínima</label>
+            <div class="flex gap-1">
+              <button
+                v-for="star in [1,2,3,4,5]"
+                :key="star"
+                type="button"
+                @click="minRating = minRating === star ? null : star"
+                class="flex-1 py-1.5 rounded-lg border text-xs font-medium transition-colors"
+                :class="minRating && minRating >= star ? 'bg-amber-50 border-amber-300 text-amber-600' : 'text-slate-400 hover:border-amber-300'"
+              >★{{ star }}</button>
+            </div>
+          </div>
+
           <button @click="run(1)" :disabled="loading" class="w-full py-2.5 rounded-xl bg-brand text-white font-semibold text-sm hover:bg-brand-dark transition-colors disabled:opacity-60">
             {{ t('common.search') }}
           </button>
@@ -228,10 +245,13 @@ function workerCities(w: any): string[] {
             <WorkerCard
               v-for="w in results.data"
               :key="w.id"
+              :id="w.id"
               :name="w.name"
               :phone="w.phone"
               :occupations="workerOccupations(w)"
               :cities="workerCities(w)"
+              :average-rating="w.averageRating"
+              :rating-count="w.ratingCount"
             />
           </div>
 
@@ -309,6 +329,20 @@ function workerCities(w: any): string[] {
                   class="px-3 py-1.5 rounded-full border text-sm font-medium cursor-pointer transition-colors"
                   :class="selectedCityIds.includes(c.id) ? 'bg-brand text-white border-brand' : 'text-slate-600 hover:border-brand hover:text-brand'"
                 >{{ c.name }}</button>
+              </div>
+            </div>
+
+            <div class="grid gap-1.5">
+              <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">Avaliação mínima</label>
+              <div class="flex gap-1.5">
+                <button
+                  v-for="star in [1,2,3,4,5]"
+                  :key="star"
+                  type="button"
+                  @click="minRating = minRating === star ? null : star"
+                  class="flex-1 py-2 rounded-xl border text-sm font-medium transition-colors"
+                  :class="minRating && minRating >= star ? 'bg-amber-50 border-amber-300 text-amber-600' : 'text-slate-400 hover:border-amber-300'"
+                >★{{ star }}</button>
               </div>
             </div>
 

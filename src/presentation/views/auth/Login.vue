@@ -11,7 +11,9 @@ const auth = useAuthStore()
 const form = reactive({ email: '', password: '' })
 
 async function submit() {
-  if (await auth.login(form)) router.replace('/tabs/home')
+  if (await auth.login(form)) {
+    router.replace(auth.isWorker ? '/worker/dashboard' : '/tabs/home')
+  }
 }
 </script>
 
@@ -62,7 +64,11 @@ async function submit() {
 
         <div class="flex justify-between text-xs text-slate-500 pt-1">
           <RouterLink to="/forgot-password" class="hover:text-brand transition-colors">{{ t('auth.forgot') }}</RouterLink>
-          <RouterLink to="/register-worker" class="hover:text-brand transition-colors font-medium text-brand">{{ t('auth.noAccount') }} {{ t('auth.registerWorker') }}</RouterLink>
+          <RouterLink to="/register-worker" class="hover:text-brand transition-colors font-medium text-brand">Sou trabalhador</RouterLink>
+        </div>
+        <div class="text-center text-xs text-slate-500">
+          Não tem conta?
+          <RouterLink to="/register-client" class="text-brand font-medium hover:underline ml-1">Criar conta de cliente</RouterLink>
         </div>
       </div>
     </div>

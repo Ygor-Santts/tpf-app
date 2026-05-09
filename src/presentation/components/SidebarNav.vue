@@ -10,12 +10,21 @@ const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
 
-const navItems = computed(() => [
+const clientNavItems = computed(() => [
   { to: '/tabs/home', icon: 'mdi:home-outline', activeIcon: 'mdi:home', label: t('app.tabs.home') },
   { to: '/tabs/workers', icon: 'mdi:magnify', activeIcon: 'mdi:magnify', label: t('app.tabs.search') },
   { to: '/tabs/categories', icon: 'mdi:view-grid-outline', activeIcon: 'mdi:view-grid', label: t('app.tabs.categories') },
   { to: '/tabs/states', icon: 'mdi:map-marker-outline', activeIcon: 'mdi:map-marker', label: t('app.tabs.locations') },
 ])
+
+const workerNavItems = [
+  { to: '/worker/dashboard', icon: 'mdi:view-dashboard-outline', activeIcon: 'mdi:view-dashboard', label: 'Dashboard' },
+  { to: '/worker/profile/edit', icon: 'mdi:account-edit-outline', activeIcon: 'mdi:account-edit', label: 'Meu perfil' },
+  { to: '/worker/portfolio', icon: 'mdi:image-multiple-outline', activeIcon: 'mdi:image-multiple', label: 'Portfólio' },
+  { to: '/worker/ratings', icon: 'mdi:star-outline', activeIcon: 'mdi:star', label: 'Avaliações' },
+]
+
+const navItems = computed(() => auth.isWorker ? workerNavItems : clientNavItems.value)
 
 function isActive(to: string) {
   return route.path.startsWith(to)
@@ -30,7 +39,13 @@ function logout() {
 <template>
   <aside class="fixed inset-y-0 left-0 w-60 bg-white border-r flex flex-col z-40">
     <div class="h-16 flex items-center px-6 border-b">
-      <RouterLink to="/tabs/home" class="text-xl font-bold text-brand">Trampo Fácil</RouterLink>
+      <RouterLink :to="auth.isWorker ? '/worker/dashboard' : '/tabs/home'" class="text-xl font-bold text-brand">
+        Trampo Fácil
+      </RouterLink>
+    </div>
+
+    <div v-if="auth.isWorker" class="px-4 py-2 border-b">
+      <span class="text-xs font-semibold uppercase tracking-wide text-brand bg-brand-50 px-2 py-1 rounded-full">Trabalhador</span>
     </div>
 
     <nav class="flex-1 px-3 py-4 flex flex-col gap-1">
@@ -46,6 +61,16 @@ function logout() {
         <Icon :icon="isActive(item.to) ? item.activeIcon : item.icon" class="text-xl flex-shrink-0" />
         {{ item.label }}
       </RouterLink>
+
+      <div v-if="auth.isWorker" class="mt-2 pt-2 border-t">
+        <RouterLink
+          to="/tabs/home"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-50 transition-colors"
+        >
+          <Icon icon="mdi:magnify" class="text-xl flex-shrink-0" />
+          Ver marketplace
+        </RouterLink>
+      </div>
     </nav>
 
     <div class="p-4 border-t flex flex-col gap-3">
