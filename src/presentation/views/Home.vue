@@ -1,62 +1,103 @@
 <script setup lang="ts">
-import QuickCard from '@ui/components/QuickCard.vue'
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
+import { useTaxonomyStore } from '@app/stores/taxonomy'
+
 const { t } = useI18n()
+const tax = useTaxonomyStore()
+
+onMounted(() => tax.loadCategories())
+
+const categoryIcons: Record<string, string> = {
+  'Construção Civil': 'mdi:hammer-wrench',
+  'Jardinagem': 'mdi:flower',
+  'Limpeza': 'mdi:broom',
+  'Elétrica': 'mdi:lightning-bolt',
+  'Pintura': 'mdi:format-paint',
+}
+
+function getCategoryIcon(name: string) {
+  return categoryIcons[name] ?? 'mdi:briefcase-outline'
+}
+
+const steps = [
+  { icon: 'mdi:magnify', titleKey: 'home.step1Title', descKey: 'home.step1Desc', color: 'bg-brand-50 text-brand' },
+  { icon: 'mdi:phone-outline', titleKey: 'home.step2Title', descKey: 'home.step2Desc', color: 'bg-green-50 text-green-600' },
+  { icon: 'mdi:handshake-outline', titleKey: 'home.step3Title', descKey: 'home.step3Desc', color: 'bg-purple-50 text-purple-600' },
+]
 </script>
+
 <template>
-  <section class="grid gap-4">
-    <input class="w-full border rounded-xl p-3 text-sm" :placeholder="t('common.searchServices')" />
-    <QuickCard />
-    <div class="grid grid-cols-2 gap-3 items-start">
-      <div class="grid gap-2">
-        <div class="text-xs text-gray-500">{{ t('home.join') }}</div>
-        <div class="rounded-2xl border shadow-card p-3 grid gap-2">
-          <div class="h-24 rounded-xl bg-gray-100 flex items-center justify-center">
-            <Icon icon="mdi:account-cowboy-hat-outline" class="text-3xl text-gray-400" />
-          </div>
-          <div class="text-xs text-gray-500">{{ t('home.imWorker') }}</div>
-          <RouterLink to="/register-worker" class="block w-full text-center rounded-xl bg-black text-white py-2 cursor-pointer">{{ t('common.go') }}</RouterLink>
-        </div>
+  <section class="grid gap-8">
+
+    <!-- Hero -->
+    <div class="rounded-2xl bg-gradient-to-br from-brand to-brand-dark text-white p-6 grid gap-4">
+      <div>
+        <h1 class="text-2xl font-bold leading-tight">{{ t('home.hero') }}</h1>
+        <p class="text-brand-100 text-sm mt-2">{{ t('home.heroSub') }}</p>
       </div>
-      <div class="grid gap-2">
-        <div class="text-xs text-right text-gray-500">{{ t('home.exploreCategories') }}</div>
-        <div class="rounded-2xl border shadow-card p-3 grid gap-2">
-          <div class="h-24 rounded-xl bg-gray-100 flex items-center justify-center">
-            <Icon icon="mdi:view-grid-outline" class="text-3xl text-gray-400" />
-          </div>
-          <div class="text-xs text-gray-500">{{ t('home.browseAvailable') }}</div>
-          <RouterLink to="/tabs/categories" class="block w-full text-center rounded-xl border py-2 cursor-pointer">{{ t('common.browse') }}</RouterLink>
-        </div>
+      <div class="grid gap-2.5">
+        <RouterLink
+          to="/tabs/workers"
+          class="flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-brand font-semibold text-sm hover:bg-brand-50 transition-colors"
+        >
+          <Icon icon="mdi:magnify" class="text-lg" />
+          {{ t('home.heroCta') }}
+        </RouterLink>
+        <RouterLink
+          to="/register-worker"
+          class="flex items-center justify-center gap-2 py-3 rounded-xl border border-white/40 text-white font-medium text-sm hover:bg-white/10 transition-colors"
+        >
+          <Icon icon="mdi:account-hard-hat-outline" class="text-lg" />
+          {{ t('home.heroSecondary') }}
+        </RouterLink>
       </div>
     </div>
-    <div class="flex items-center justify-between">
-      <div class="font-semibold">{{ t('home.locations') }}</div>
-      <RouterLink to="/tabs/states" class="text-xs text-gray-500 underline cursor-pointer">{{ t('common.showAll') }}</RouterLink>
-    </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-      <RouterLink to="/tabs/states" class="rounded-xl border p-3 flex items-center gap-2 hover:bg-gray-50 cursor-pointer"><Icon icon="mdi:map-search-outline" /> <span>{{ t('common.find') }}</span></RouterLink>
-      <RouterLink to="/tabs/categories" class="rounded-xl border p-3 flex items-center gap-2 hover:bg-gray-50 cursor-pointer"><Icon icon="mdi:book-open-variant-outline" /> <span>{{ t('common.browse') }}</span></RouterLink>
-      <RouterLink to="/tabs/states" class="rounded-xl border p-3 flex items-center gap-2 hover:bg-gray-50 cursor-pointer"><Icon icon="mdi:earth" /> <span>Regions</span></RouterLink>
-      <RouterLink to="/tabs/workers" class="rounded-xl border p-3 flex items-center gap-2 hover:bg-gray-50 cursor-pointer"><Icon icon="mdi:account-hard-hat-outline" /> <span>Professional</span></RouterLink>
-      <div class="rounded-xl border p-3 flex items-center gap-2 opacity-50 pointer-events-none"><Icon icon="mdi:home-outline" /> <span>Home</span></div>
-      <div class="rounded-xl border p-3 flex items-center gap-2 opacity-50 pointer-events-none"><Icon icon="mdi:lifebuoy" /> <span>Assistance</span></div>
-    </div>
-    <div class="flex items-center justify-between">
-      <div class="font-semibold">{{ t('home.viewMore') }}</div>
-      <RouterLink to="/tabs/states" class="text-xs text-gray-500 underline cursor-pointer">{{ t('common.seeAllLocations') }}</RouterLink>
-    </div>
+
+    <!-- Categorias populares -->
     <div class="grid gap-3">
-      <div class="rounded-2xl border shadow-card p-4 grid gap-2">
-        <div class="h-24 rounded-xl bg-gray-100"></div>
-        <div class="text-xs text-gray-500">{{ t('home.trustedWorkers') }}</div>
-        <RouterLink to="/tabs/workers" class="block w-full text-center rounded-xl border py-2 cursor-pointer">{{ t('common.find') }}</RouterLink>
+      <div class="flex items-center justify-between">
+        <h2 class="font-bold text-slate-900">{{ t('home.popularCategories') }}</h2>
+        <RouterLink to="/tabs/categories" class="text-xs text-brand font-medium hover:underline">{{ t('common.showAll') }}</RouterLink>
       </div>
-      <div class="rounded-2xl border shadow-card p-4 grid gap-2">
-        <div class="h-24 rounded-xl bg-gray-100"></div>
-        <div class="text-xs text-gray-500">{{ t('home.serviceAreas') }}</div>
-        <RouterLink to="/tabs/workers" class="block w-full text-center rounded-xl bg-black text-white py-2 cursor-pointer">{{ t('common.find') }}</RouterLink>
+      <div v-if="tax.loading" class="grid grid-cols-2 gap-3">
+        <div v-for="i in 4" :key="i" class="h-20 rounded-2xl bg-slate-100 animate-pulse" />
+      </div>
+      <div v-else class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <RouterLink
+          v-for="c in tax.categories"
+          :key="c.id"
+          :to="`/tabs/categories/${c.id}/occupations`"
+          class="group bg-white rounded-2xl border shadow-card p-4 flex flex-col items-center gap-2 hover:shadow-card-hover hover:border-brand-200 transition-all cursor-pointer"
+        >
+          <div class="h-10 w-10 rounded-full bg-brand-50 flex items-center justify-center group-hover:bg-brand-100 transition-colors">
+            <Icon :icon="getCategoryIcon(c.name)" class="text-xl text-brand" />
+          </div>
+          <span class="text-sm font-medium text-slate-700 text-center leading-tight">{{ c.name }}</span>
+        </RouterLink>
       </div>
     </div>
+
+    <!-- Como funciona -->
+    <div class="grid gap-4">
+      <h2 class="font-bold text-slate-900">{{ t('home.howItWorks') }}</h2>
+      <div class="grid gap-3">
+        <div
+          v-for="(step, i) in steps"
+          :key="i"
+          class="bg-white rounded-2xl border shadow-card p-4 flex items-start gap-4"
+        >
+          <div :class="['h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0', step.color]">
+            <Icon :icon="step.icon" class="text-xl" />
+          </div>
+          <div>
+            <div class="font-semibold text-slate-900 text-sm">{{ i + 1 }}. {{ t(step.titleKey) }}</div>
+            <div class="text-xs text-slate-500 mt-0.5">{{ t(step.descKey) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
 </template>
