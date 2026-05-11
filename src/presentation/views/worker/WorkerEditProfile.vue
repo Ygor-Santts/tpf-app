@@ -142,6 +142,7 @@ const currentCities = computed(() => worker.profile?.operationCities ?? [])
         </select>
 
         <div v-if="selectedState" class="flex flex-wrap gap-1.5">
+          <span v-if="!(tax.citiesByState[selectedState]?.length)" class="text-sm text-slate-400">Nenhuma cidade encontrada para este estado.</span>
           <button
             v-for="c in tax.citiesByState[selectedState] || []"
             :key="c.id"
@@ -153,7 +154,9 @@ const currentCities = computed(() => worker.profile?.operationCities ?? [])
         </div>
       </div>
 
-      <p v-if="worker.error" class="text-red-500 text-sm">{{ worker.error }}</p>
+      <div v-if="worker.error" class="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+        <Icon icon="mdi:alert-circle-outline" class="flex-shrink-0" />{{ worker.error }}
+      </div>
 
       <button type="submit" :disabled="worker.loading" class="w-full py-3 rounded-xl bg-brand text-white font-semibold hover:bg-brand-dark transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
         <Icon v-if="worker.loading" icon="mdi:loading" class="animate-spin" />

@@ -17,14 +17,14 @@ const clientNavItems = computed(() => [
   { to: '/tabs/states', icon: 'mdi:map-marker-outline', activeIcon: 'mdi:map-marker', label: t('app.tabs.locations') },
 ])
 
-const workerNavItems = [
-  { to: '/worker/dashboard', icon: 'mdi:view-dashboard-outline', activeIcon: 'mdi:view-dashboard', label: 'Dashboard' },
-  { to: '/worker/profile/edit', icon: 'mdi:account-edit-outline', activeIcon: 'mdi:account-edit', label: 'Meu perfil' },
-  { to: '/worker/portfolio', icon: 'mdi:image-multiple-outline', activeIcon: 'mdi:image-multiple', label: 'Portfólio' },
-  { to: '/worker/ratings', icon: 'mdi:star-outline', activeIcon: 'mdi:star', label: 'Avaliações' },
-]
+const workerNavItems = computed(() => [
+  { to: '/worker/dashboard', icon: 'mdi:view-dashboard-outline', activeIcon: 'mdi:view-dashboard', label: t('worker.tabs.dashboard') },
+  { to: '/worker/profile/edit', icon: 'mdi:account-edit-outline', activeIcon: 'mdi:account-edit', label: t('worker.tabs.profile') },
+  { to: '/worker/portfolio', icon: 'mdi:image-multiple-outline', activeIcon: 'mdi:image-multiple', label: t('worker.tabs.portfolio') },
+  { to: '/worker/ratings', icon: 'mdi:star-outline', activeIcon: 'mdi:star', label: t('worker.tabs.ratings') },
+])
 
-const navItems = computed(() => auth.isWorker ? workerNavItems : clientNavItems.value)
+const navItems = computed(() => auth.isWorker ? workerNavItems.value : clientNavItems.value)
 
 function isActive(to: string) {
   return route.path.startsWith(to)

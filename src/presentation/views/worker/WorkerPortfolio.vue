@@ -7,6 +7,10 @@ const worker = useWorkerStore()
 const fileInput = ref<HTMLInputElement>()
 const caption = ref('')
 const uploading = ref(false)
+const uploadError = ref('')
+const confirmDeleteId = ref<number | null>(null)
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50 MB
 
 onMounted(async () => {
   await worker.loadProfile()
@@ -22,6 +26,12 @@ function mediaUrl(url: string) {
 async function onFileChange(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
+  uploadError.value = ''
+  if (file.size > MAX_FILE_SIZE) {
+    uploadError.value = 'Arquivo muito grande. Limite: 50 MB.'
+    if (fileInput.value) fileInput.value.value = ''
+    return
+  }
   uploading.value = true
   await worker.uploadItem(file, caption.value || undefined)
   caption.value = ''
@@ -30,8 +40,8 @@ async function onFileChange(event: Event) {
 }
 
 async function remove(id: number) {
-  if (!confirm('Remover este item do portfólio?')) return
   await worker.deleteItem(id)
+  confirmDeleteId.value = null
 }
 </script>
 
@@ -52,7 +62,12 @@ async function remove(id: number) {
         <span>{{ uploading ? 'Enviando...' : 'Selecionar imagem ou vídeo' }}</span>
         <input ref="fileInput" type="file" accept="image/*,video/*" class="sr-only" :disabled="uploading" @change="onFileChange" />
       </label>
-      <p v-if="worker.error" class="text-red-500 text-sm">{{ worker.error }}</p>
+      <p v-if="uploadError" class="flex items-center gap-1.5 text-red-600 text-sm bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+        <Icon icon="mdi:alert-circle-outline" />{{ uploadError }}
+      </p>
+      <p v-else-if="worker.error" class="flex items-center gap-1.5 text-red-600 text-sm bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+        <Icon icon="mdi:alert-circle-outline" />{{ worker.error }}
+      </p>
     </div>
 
     <!-- Grid -->
@@ -73,11 +88,23 @@ async function remove(id: number) {
       >
         <video v-if="item.type === 'video'" :src="mediaUrl(item.url)" class="w-full aspect-square object-cover" />
         <img v-else :src="mediaUrl(item.url)" :alt="item.caption" class="w-full aspect-square object-cover" />
+
+        <!-- Hover overlay — trash trigger -->
         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-          <button @click="remove(item.id)" class="h-10 w-10 rounded-full bg-white/90 flex items-center justify-center hover:bg-red-50">
+          <button @click.stop="confirmDeleteId = item.id" class="h-10 w-10 rounded-full bg-white/90 flex items-center justify-center hover:bg-red-50">
             <Icon icon="mdi:trash-can-outline" class="text-red-500 text-xl" />
           </button>
         </div>
+
+        <!-- Inline confirm overlay -->
+        <div v-if="confirmDeleteId === item.id" class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 p-3">
+          <p class="text-white text-xs text-center font-medium">Remover este item?</p>
+          <div class="flex gap-2">
+            <button @click="remove(item.id)" class="px-3 py-1.5 bg-red-500 text-white text-xs rounded-lg font-medium hover:bg-red-600">Remover</button>
+            <button @click="confirmDeleteId = null" class="px-3 py-1.5 bg-white/20 text-white text-xs rounded-lg hover:bg-white/30">Cancelar</button>
+          </div>
+        </div>
+
         <div v-if="item.caption" class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2">
           <p class="text-white text-xs truncate">{{ item.caption }}</p>
         </div>

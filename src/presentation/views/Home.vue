@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
 
 const { t } = useI18n()
 const tax = useTaxonomyStore()
+const categoriesError = ref(false)
 
-onMounted(() => tax.loadCategories())
+onMounted(async () => {
+  try { await tax.loadCategories() }
+  catch { categoriesError.value = true }
+})
+
 
 const categoryIcons: Record<string, string> = {
   'Construção Civil': 'mdi:hammer-wrench',
@@ -63,6 +68,10 @@ const steps = [
       </div>
       <div v-if="tax.loading" class="grid grid-cols-2 gap-3">
         <div v-for="i in 4" :key="i" class="h-20 rounded-2xl bg-slate-100 animate-pulse" />
+      </div>
+      <div v-else-if="categoriesError" class="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+        <Icon icon="mdi:alert-circle-outline" />
+        Não foi possível carregar as categorias. Tente novamente.
       </div>
       <div v-else class="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <RouterLink

@@ -78,7 +78,12 @@
     "noAccount": "Não tem conta?",
     "haveAccount": "Já tem conta?",
     "selectAtLeastOne": "Selecione ao menos um.",
-    "backToLogin": "Voltar ao login"
+    "backToLogin": "Voltar ao login",
+    "imWorker": "Sou trabalhador",
+    "createClientAccount": "Criar conta de cliente",
+    "sessionExpired": "Sua sessão expirou. Faça login novamente.",
+    "registerClient": "Cadastro de Cliente",
+    "registerClientSuccess": "Conta criada! Faça login para continuar."
   },
   "marketplace": { "categories": "Categorias", "occupations": "Ocupações", "category": "Categoria", "backToCategories": "Voltar às categorias" },
   "locales": { "states": "Estados", "cities": "Cidades", "backToStates": "Voltar aos estados" },
@@ -91,6 +96,81 @@
     "contact": "Contatar",
     "phone": "Telefone",
     "cities": "Cidades de atuação",
-    "skills": "Habilidades"
+    "skills": "Habilidades",
+    "minRating": "Avaliação mínima",
+    "anyRating": "Qualquer avaliação",
+    "viewProfile": "Ver perfil",
+    "ratings": "avaliações",
+    "noRatings": "Sem avaliações"
+  },
+  "worker": {
+    "tabs": {
+      "dashboard": "Dashboard",
+      "profile": "Perfil",
+      "portfolio": "Portfólio",
+      "ratings": "Avaliações"
+    },
+    "dashboard": {
+      "greeting": "Olá,",
+      "welcome": "Bem-vindo ao seu painel",
+      "avgRating": "Avaliação média",
+      "totalRatings": "Avaliações recebidas",
+      "quickActions": "Ações rápidas",
+      "editProfile": "Editar perfil",
+      "myPortfolio": "Portfólio",
+      "myRatings": "Avaliações",
+      "viewPublic": "Ver perfil público",
+      "recentRatings": "Avaliações recentes",
+      "viewAll": "Ver todas"
+    },
+    "profile": {
+      "title": "Editar perfil",
+      "personalData": "Dados pessoais",
+      "name": "Nome",
+      "phone": "Telefone",
+      "bio": "Bio",
+      "bioPlaceholder": "Fale sobre você e seu trabalho...",
+      "currentOccupations": "Ocupações atuais",
+      "noOccupations": "Nenhuma ocupação cadastrada",
+      "addOccupations": "Para adicionar novas, selecione uma categoria abaixo:",
+      "operationCities": "Cidades de atuação",
+      "noCities": "Nenhuma cidade cadastrada",
+      "updateCities": "Para atualizar, selecione estado e cidades abaixo:",
+      "noCitiesInState": "Nenhuma cidade encontrada para este estado.",
+      "save": "Salvar alterações",
+      "saved": "Perfil atualizado com sucesso!"
+    },
+    "portfolio": {
+      "title": "Portfólio",
+      "addWork": "Adicionar trabalho",
+      "descriptionPlaceholder": "Descrição (opcional)",
+      "uploading": "Enviando...",
+      "selectMedia": "Selecionar imagem ou vídeo",
+      "empty": "Nenhum trabalho no portfólio ainda.",
+      "fileTooLarge": "Arquivo muito grande. Limite: 50 MB.",
+      "removeConfirm": "Remover este item?",
+      "remove": "Remover",
+      "cancel": "Cancelar"
+    },
+    "ratings": {
+      "title": "Avaliações",
+      "received": "avaliações recebidas",
+      "empty": "Nenhuma avaliação recebida ainda.",
+      "rate": "Avaliar profissional",
+      "yourScore": "Sua nota:",
+      "commentPlaceholder": "Deixe um comentário (opcional)",
+      "submit": "Enviar avaliação",
+      "submitting": "Enviando...",
+      "submitted": "Obrigado pela sua avaliação!",
+      "loginToRate": "Faça login para avaliar este profissional.",
+      "noScore": "Selecione uma nota de 1 a 5.",
+      "errorSubmit": "Erro ao enviar avaliação."
+    },
+    "publicProfile": {
+      "notFound": "Profissional não encontrado.",
+      "ratings": "avaliações",
+      "portfolio": "Portfólio",
+      "contact": "Ligar para"
+    }
   }
 }

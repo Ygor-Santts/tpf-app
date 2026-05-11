@@ -5,4 +5,19 @@ api.interceptors.request.use((config) => {
   if (token) { config.headers = config.headers || {}; config.headers.Authorization = `Bearer ${token}` }
   return config
 })
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      const hadToken = Boolean(localStorage.getItem('tpf_token'))
+      localStorage.removeItem('tpf_token')
+      localStorage.removeItem('tpf_user')
+      const currentPath = window.location.pathname
+      if (currentPath !== '/login') {
+        window.location.href = hadToken ? '/login?expired=1' : '/login'
+      }
+    }
+    return Promise.reject(error)
+  }
+)
 export { api }

@@ -184,16 +184,21 @@ function workerCities(w: any): string[] {
           </div>
 
           <div class="grid gap-1.5">
-            <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">Avaliação mínima</label>
+            <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('workers.minRating') }}</label>
             <div class="flex gap-1">
               <button
                 v-for="star in [1,2,3,4,5]"
                 :key="star"
                 type="button"
                 @click="minRating = minRating === star ? null : star"
-                class="flex-1 py-1.5 rounded-lg border text-xs font-medium transition-colors"
-                :class="minRating && minRating >= star ? 'bg-amber-50 border-amber-300 text-amber-600' : 'text-slate-400 hover:border-amber-300'"
-              >★{{ star }}</button>
+                class="flex-1 py-1.5 rounded-lg border text-xs font-medium transition-colors flex flex-col items-center gap-0.5"
+                :class="minRating && minRating >= star ? 'bg-amber-50 border-amber-300 text-amber-600' : 'text-slate-300 hover:border-amber-300'"
+              >
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <span>{{ star }}</span>
+              </button>
             </div>
           </div>
 
@@ -215,7 +220,9 @@ function workerCities(w: any): string[] {
           {{ t('common.search') }}
         </button>
 
-        <p v-if="error" class="text-red-500 text-sm">{{ error }}</p>
+        <div v-if="error" class="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+          <Icon icon="mdi:alert-circle-outline" class="flex-shrink-0" />{{ error }}
+        </div>
 
         <!-- Skeleton -->
         <template v-if="loading">
@@ -333,16 +340,21 @@ function workerCities(w: any): string[] {
             </div>
 
             <div class="grid gap-1.5">
-              <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">Avaliação mínima</label>
+              <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('workers.minRating') }}</label>
               <div class="flex gap-1.5">
                 <button
                   v-for="star in [1,2,3,4,5]"
                   :key="star"
                   type="button"
                   @click="minRating = minRating === star ? null : star"
-                  class="flex-1 py-2 rounded-xl border text-sm font-medium transition-colors"
-                  :class="minRating && minRating >= star ? 'bg-amber-50 border-amber-300 text-amber-600' : 'text-slate-400 hover:border-amber-300'"
-                >★{{ star }}</button>
+                  class="flex-1 py-2 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-0.5"
+                  :class="minRating && minRating >= star ? 'bg-amber-50 border-amber-300 text-amber-600' : 'text-slate-300 hover:border-amber-300'"
+                >
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span>{{ star }}</span>
+                </button>
               </div>
             </div>
 

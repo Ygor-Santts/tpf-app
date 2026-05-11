@@ -78,7 +78,12 @@
     "noAccount": "No account?",
     "haveAccount": "Already have an account?",
     "selectAtLeastOne": "Select at least one.",
-    "backToLogin": "Back to login"
+    "backToLogin": "Back to login",
+    "imWorker": "I'm a worker",
+    "createClientAccount": "Create client account",
+    "sessionExpired": "Your session expired. Please log in again.",
+    "registerClient": "Client Registration",
+    "registerClientSuccess": "Account created! Please log in to continue."
   },
   "marketplace": { "categories": "Categories", "occupations": "Occupations", "category": "Category", "backToCategories": "Back to categories" },
   "locales": { "states": "States", "cities": "Cities", "backToStates": "Back to states" },
@@ -91,6 +96,81 @@
     "contact": "Contact",
     "phone": "Phone",
     "cities": "Operation cities",
-    "skills": "Skills"
+    "skills": "Skills",
+    "minRating": "Minimum rating",
+    "anyRating": "Any rating",
+    "viewProfile": "View profile",
+    "ratings": "ratings",
+    "noRatings": "No ratings"
+  },
+  "worker": {
+    "tabs": {
+      "dashboard": "Dashboard",
+      "profile": "Profile",
+      "portfolio": "Portfolio",
+      "ratings": "Ratings"
+    },
+    "dashboard": {
+      "greeting": "Hello,",
+      "welcome": "Welcome to your dashboard",
+      "avgRating": "Average rating",
+      "totalRatings": "Ratings received",
+      "quickActions": "Quick actions",
+      "editProfile": "Edit profile",
+      "myPortfolio": "Portfolio",
+      "myRatings": "Ratings",
+      "viewPublic": "View public profile",
+      "recentRatings": "Recent ratings",
+      "viewAll": "View all"
+    },
+    "profile": {
+      "title": "Edit profile",
+      "personalData": "Personal data",
+      "name": "Name",
+      "phone": "Phone",
+      "bio": "Bio",
+      "bioPlaceholder": "Tell us about yourself and your work...",
+      "currentOccupations": "Current occupations",
+      "noOccupations": "No occupations registered",
+      "addOccupations": "To add new ones, select a category below:",
+      "operationCities": "Operation cities",
+      "noCities": "No cities registered",
+      "updateCities": "To update, select a state and cities below:",
+      "noCitiesInState": "No cities found for this state.",
+      "save": "Save changes",
+      "saved": "Profile updated successfully!"
+    },
+    "portfolio": {
+      "title": "Portfolio",
+      "addWork": "Add work",
+      "descriptionPlaceholder": "Description (optional)",
+      "uploading": "Uploading...",
+      "selectMedia": "Select image or video",
+      "empty": "No works in portfolio yet.",
+      "fileTooLarge": "File too large. Limit: 50 MB.",
+      "removeConfirm": "Remove this item?",
+      "remove": "Remove",
+      "cancel": "Cancel"
+    },
+    "ratings": {
+      "title": "Ratings",
+      "received": "ratings received",
+      "empty": "No ratings received yet.",
+      "rate": "Rate professional",
+      "yourScore": "Your rating:",
+      "commentPlaceholder": "Leave a comment (optional)",
+      "submit": "Submit rating",
+      "submitting": "Submitting...",
+      "submitted": "Thank you for your rating!",
+      "loginToRate": "Log in to rate this professional.",
+      "noScore": "Select a rating from 1 to 5.",
+      "errorSubmit": "Error submitting rating."
+    },
+    "publicProfile": {
+      "notFound": "Professional not found.",
+      "ratings": "ratings",
+      "portfolio": "Portfolio",
+      "contact": "Call"
+    }
   }
 }

@@ -67,7 +67,7 @@ const recentRatings = computed(() => worker.ratings.slice(0, 3))
           <Icon icon="mdi:star-outline" class="text-2xl text-brand" />
           <span class="text-sm font-medium text-slate-700">Avaliações</span>
         </RouterLink>
-        <RouterLink :to="`/tabs/workers/${worker.profile?.id}`" class="bg-white rounded-2xl border shadow-card p-4 flex flex-col items-center gap-2 hover:shadow-card-hover hover:border-brand-200 transition-all">
+        <RouterLink v-if="worker.profile?.id" :to="`/tabs/workers/${worker.profile.id}`" class="bg-white rounded-2xl border shadow-card p-4 flex flex-col items-center gap-2 hover:shadow-card-hover hover:border-brand-200 transition-all">
           <Icon icon="mdi:eye-outline" class="text-2xl text-brand" />
           <span class="text-sm font-medium text-slate-700">Ver perfil público</span>
         </RouterLink>

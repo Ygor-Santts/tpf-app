@@ -16,14 +16,14 @@ const clientTabs = computed(() => [
   { to: '/tabs/states', icon: 'mdi:map-marker-outline', activeIcon: 'mdi:map-marker', label: t('app.tabs.locations') },
 ])
 
-const workerTabs = [
-  { to: '/worker/dashboard', icon: 'mdi:view-dashboard-outline', activeIcon: 'mdi:view-dashboard', label: 'Dashboard' },
-  { to: '/worker/profile/edit', icon: 'mdi:account-edit-outline', activeIcon: 'mdi:account-edit', label: 'Perfil' },
-  { to: '/worker/portfolio', icon: 'mdi:image-multiple-outline', activeIcon: 'mdi:image-multiple', label: 'Portfólio' },
-  { to: '/worker/ratings', icon: 'mdi:star-outline', activeIcon: 'mdi:star', label: 'Avaliações' },
-]
+const workerTabs = computed(() => [
+  { to: '/worker/dashboard', icon: 'mdi:view-dashboard-outline', activeIcon: 'mdi:view-dashboard', label: t('worker.tabs.dashboard') },
+  { to: '/worker/profile/edit', icon: 'mdi:account-edit-outline', activeIcon: 'mdi:account-edit', label: t('worker.tabs.profile') },
+  { to: '/worker/portfolio', icon: 'mdi:image-multiple-outline', activeIcon: 'mdi:image-multiple', label: t('worker.tabs.portfolio') },
+  { to: '/worker/ratings', icon: 'mdi:star-outline', activeIcon: 'mdi:star', label: t('worker.tabs.ratings') },
+])
 
-const tabs = computed(() => auth.isWorker ? workerTabs : clientTabs.value)
+const tabs = computed(() => auth.isWorker ? workerTabs.value : clientTabs.value)
 
 function isActive(to: string) {
   return route.path.startsWith(to)
@@ -31,12 +31,12 @@ function isActive(to: string) {
 </script>
 
 <template>
-  <nav class="fixed bottom-0 inset-x-0 z-30 bg-white border-t flex safe-bottom">
+  <nav class="fixed bottom-0 inset-x-0 z-30 bg-white border-t flex pb-safe">
     <RouterLink
       v-for="tab in tabs"
       :key="tab.to"
       :to="tab.to"
-      class="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 text-[11px] transition-colors"
+      class="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 text-[12px] transition-colors"
       :class="isActive(tab.to) ? 'text-brand' : 'text-slate-400'"
     >
       <Icon :icon="isActive(tab.to) ? tab.activeIcon : tab.icon" class="text-xl" />
