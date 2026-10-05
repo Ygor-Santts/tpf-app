@@ -40,7 +40,9 @@ onMounted(async () => {
     portfolio.value = port
     ratings.value = rat.data
     summary.value = sum
-  } catch {}
+  } catch {
+    // ignore: page shows empty state
+  }
   finally { loading.value = false }
 })
 

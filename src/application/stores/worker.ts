@@ -42,7 +42,9 @@ export const useWorkerStore = defineStore('worker', {
     },
     async loadRatingSummary(workerId: number) {
       try { this.ratingSummary = await getWorkerRatingSummary(workerId) }
-      catch {}
+      catch {
+        // summary is optional; keep previous value
+      }
     },
     async uploadItem(file: File, caption?: string) {
       this.loading = true
