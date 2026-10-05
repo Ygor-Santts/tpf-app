@@ -22,8 +22,8 @@ async function submit() {
     await resetPassword(token.value, form.password)
     state.message = 'Senha redefinida com sucesso.'
     setTimeout(() => router.replace('/login'), 1500)
-  } catch {
-    state.error = 'Não foi possível redefinir a senha.'
+  } catch (err: any) {
+    state.error = err?.response?.data?.message || 'Não foi possível redefinir a senha.'
   } finally {
     state.loading = false
   }
@@ -47,6 +47,7 @@ async function submit() {
               v-model="form.password"
               type="password"
               :placeholder="t('auth.newPassword')"
+              minlength="8"
               class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all"
               required
             />
