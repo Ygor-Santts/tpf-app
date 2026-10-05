@@ -23,7 +23,7 @@ const workerTabs = computed(() => [
   { to: '/worker/ratings', icon: 'mdi:star-outline', activeIcon: 'mdi:star', label: t('worker.tabs.ratings') },
 ])
 
-const tabs = computed(() => auth.isWorker ? workerTabs.value : clientTabs.value)
+const tabs = computed(() => auth.inWorkerMode ? workerTabs.value : clientTabs.value)
 
 function isActive(to: string) {
   return route.path.startsWith(to)

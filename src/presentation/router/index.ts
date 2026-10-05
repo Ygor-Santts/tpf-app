@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { useAuthStore } from '@app/stores/auth'
 
 const AppLayout = () => import('@ui/components/AppLayout.vue')
 const Home = () => import('@ui/views/Home.vue')
@@ -25,6 +26,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/register-client', component: RegisterClient, meta: { public: true } },
   { path: '/forgot-password', component: ForgotPassword, meta: { public: true } },
   { path: '/reset-password', component: ResetPassword, meta: { public: true } },
+  { path: '/become-worker', component: RegisterWorker, props: { upgrade: true } },
   {
     path: '/tabs',
     component: AppLayout,
@@ -56,14 +58,15 @@ const router = createRouter({ history: createWebHistory(), routes })
 router.beforeEach((to, _from, next) => {
   const isPublic = Boolean(to.meta.public)
   const isWorkerOnly = Boolean(to.meta.workerOnly)
-  const token = localStorage.getItem('tpf_token')
-  const userRaw = localStorage.getItem('tpf_user')
-  const user = userRaw ? JSON.parse(userRaw) : null
-  const isWorker = Boolean(user?.isWorker)
+  const auth = useAuthStore()
+  const token = auth.token
 
   if (!isPublic && !token) return next('/login')
-  if (token && isWorker && to.path === '/login') return next('/worker/dashboard')
-  if (isWorkerOnly && (!token || !isWorker)) return next('/tabs/home')
+  if (token && auth.isWorker && to.path === '/login') return next(auth.home)
+  if (to.path === '/become-worker' && auth.isWorker) return next('/worker/dashboard')
+  if (isWorkerOnly && !auth.isWorker) return next('/tabs/home')
+  // A worker opening a worker page (e.g. a bookmarked link) switches to worker mode.
+  if (isWorkerOnly && !auth.inWorkerMode) auth.setMode('worker')
 
   next()
 })

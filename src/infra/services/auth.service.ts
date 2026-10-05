@@ -1,5 +1,5 @@
 import { api } from '@infra/http'
-import type { LoginDTO, LoginResponse, RegisterWorkerDTO, RegisterClientDTO } from '@domain/auth'
+import type { LoginDTO, LoginResponse, RegisterWorkerDTO, RegisterClientDTO, ActivateWorkerDTO } from '@domain/auth'
 
 export async function signIn(payload: LoginDTO): Promise<LoginResponse> {
   const { data } = await api.post<LoginResponse>('/auth/sign-in', payload)
@@ -8,6 +8,11 @@ export async function signIn(payload: LoginDTO): Promise<LoginResponse> {
 
 export async function workerSignUp(payload: RegisterWorkerDTO): Promise<void> {
   await api.post('/auth/worker/sign-up', payload)
+}
+
+export async function activateWorker(payload: ActivateWorkerDTO): Promise<LoginResponse> {
+  const { data } = await api.post<LoginResponse>('/auth/worker/activate', payload)
+  return data
 }
 
 export async function clientSignUp(payload: RegisterClientDTO): Promise<void> {

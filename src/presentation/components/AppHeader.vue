@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@app/stores/auth'
 import { Icon } from '@iconify/vue'
 
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 const router = useRouter()
 const auth = useAuthStore()
 
@@ -19,11 +19,17 @@ function logout() {
   closeMenu()
   router.replace('/login')
 }
+
+function switchMode() {
+  auth.setMode(auth.inWorkerMode ? 'client' : 'worker')
+  closeMenu()
+  router.push(auth.home)
+}
 </script>
 
 <template>
   <header class="fixed top-0 inset-x-0 z-30 h-14 bg-white border-b flex items-center justify-between px-4">
-    <RouterLink :to="auth.isWorker ? '/worker/dashboard' : '/tabs/home'" class="flex items-center gap-2">
+    <RouterLink :to="auth.home" class="flex items-center gap-2">
       <span class="text-lg font-bold text-brand">Trampo Fácil</span>
     </RouterLink>
 
@@ -53,17 +59,36 @@ function logout() {
             <div class="px-4 py-2.5 border-b">
               <p class="text-sm font-semibold text-slate-900 truncate">{{ auth.user?.name }}</p>
               <p class="text-xs text-slate-500 truncate">{{ auth.user?.email }}</p>
-              <span v-if="auth.isWorker" class="mt-1 inline-block text-xs font-medium bg-brand-50 text-brand px-2 py-0.5 rounded-full">Trabalhador</span>
+              <span v-if="auth.inWorkerMode" class="mt-1 inline-block text-xs font-medium bg-brand-50 text-brand px-2 py-0.5 rounded-full">Trabalhador</span>
             </div>
 
             <RouterLink
-              v-if="auth.isWorker"
+              v-if="auth.inWorkerMode"
               to="/worker/profile/edit"
               @click="closeMenu"
               class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
             >
               <Icon icon="mdi:account-edit-outline" class="text-lg text-slate-400" />
               Meu perfil
+            </RouterLink>
+
+            <button
+              v-if="auth.isWorker"
+              @click="switchMode"
+              class="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              <Icon icon="mdi:swap-horizontal" class="text-lg text-slate-400" />
+              {{ auth.inWorkerMode ? t('mode.toClient') : t('mode.toWorker') }}
+            </button>
+
+            <RouterLink
+              v-else
+              to="/become-worker"
+              @click="closeMenu"
+              class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              <Icon icon="mdi:briefcase-plus-outline" class="text-lg text-slate-400" />
+              {{ t('mode.becomeWorker') }}
             </RouterLink>
 
             <button

@@ -7,12 +7,16 @@ import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 import StepIndicator from '@ui/components/StepIndicator.vue'
 
+// upgrade: a logged-in client adds a worker profile, so the personal-data step is skipped.
+const props = defineProps<{ upgrade?: boolean }>()
+
 const { t } = useI18n()
 const router = useRouter()
 const auth = useAuthStore()
 const tax = useTaxonomyStore()
 
-const currentStep = ref(1)
+const firstStep = props.upgrade ? 2 : 1
+const currentStep = ref(firstStep)
 const success = ref(false)
 
 const form = reactive({
@@ -56,11 +60,20 @@ function nextStep() {
 }
 
 function prevStep() {
-  if (currentStep.value > 1) currentStep.value--
+  if (currentStep.value > firstStep) currentStep.value--
+  else if (props.upgrade) router.back()
 }
 
 async function submit() {
   if (!step3Valid.value) return
+  if (props.upgrade) {
+    const ok = await auth.activateWorker({
+      jobOccupationIds: form.jobOccupationIds,
+      operationCitiesIds: form.operationCitiesIds,
+    })
+    if (ok) router.replace('/worker/profile/edit')
+    return
+  }
   await auth.registerWorker({
     name: form.name,
     email: form.email,
@@ -75,7 +88,7 @@ async function submit() {
   }
 }
 
-const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('auth.step3Label')])
+const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('auth.step3Label')].slice(firstStep - 1))
 </script>
 
 <template>
@@ -87,8 +100,8 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
 
       <div class="bg-white rounded-2xl shadow-card border p-6 grid gap-5">
         <div>
-          <h2 class="text-lg font-bold text-slate-900 mb-4">{{ t('auth.registerWorker') }}</h2>
-          <StepIndicator :steps="steps" :current="currentStep" />
+          <h2 class="text-lg font-bold text-slate-900 mb-4">{{ upgrade ? t('mode.becomeWorker') : t('auth.registerWorker') }}</h2>
+          <StepIndicator :steps="steps" :current="currentStep - firstStep + 1" />
         </div>
 
         <!-- Sucesso -->
@@ -188,7 +201,7 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
           </div>
         </div>
 
-        <div class="text-center text-xs text-slate-500 pt-1 border-t">
+        <div v-if="!upgrade" class="text-center text-xs text-slate-500 pt-1 border-t">
           {{ t('auth.haveAccount') }}
           <RouterLink to="/login" class="text-brand font-medium hover:underline ml-1">{{ t('auth.login') }}</RouterLink>
         </div>

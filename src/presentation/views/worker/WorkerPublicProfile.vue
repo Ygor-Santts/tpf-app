@@ -44,7 +44,8 @@ onMounted(async () => {
   finally { loading.value = false }
 })
 
-const canRate = computed(() => auth.token && !auth.isWorker && !submitted.value)
+const isOwnProfile = computed(() => auth.user?.workerId === Number(props.id))
+const canRate = computed(() => auth.token && !isOwnProfile.value && !submitted.value)
 
 const occupations = computed(() =>
   worker.value?.jobOccupations?.map((o: any) => o.name) ?? []
