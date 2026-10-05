@@ -10,10 +10,15 @@ export interface LoginResponse {
   user: UserProfile;
 }
 
-export interface RegisterWorkerDTO {
-  name: string; password: string; email: string; phone: string;
+export interface ActivateWorkerDTO {
   jobOccupationIds: number[]; operationCitiesIds: number[]
 }
+
+export interface RegisterWorkerDTO extends ActivateWorkerDTO {
+  name: string; password: string; email: string; phone: string;
+}
+
+export type AppMode = 'client' | 'worker'
 
 export interface RegisterClientDTO {
   name: string; email: string; phone: string; password: string;

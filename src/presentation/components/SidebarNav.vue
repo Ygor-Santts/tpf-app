@@ -24,7 +24,7 @@ const workerNavItems = computed(() => [
   { to: '/worker/ratings', icon: 'mdi:star-outline', activeIcon: 'mdi:star', label: t('worker.tabs.ratings') },
 ])
 
-const navItems = computed(() => auth.isWorker ? workerNavItems.value : clientNavItems.value)
+const navItems = computed(() => auth.inWorkerMode ? workerNavItems.value : clientNavItems.value)
 
 function isActive(to: string) {
   return route.path.startsWith(to)
@@ -34,17 +34,22 @@ function logout() {
   auth.logout()
   router.replace('/login')
 }
+
+function switchMode() {
+  auth.setMode(auth.inWorkerMode ? 'client' : 'worker')
+  router.push(auth.home)
+}
 </script>
 
 <template>
   <aside class="fixed inset-y-0 left-0 w-60 bg-white border-r flex flex-col z-40">
     <div class="h-16 flex items-center px-6 border-b">
-      <RouterLink :to="auth.isWorker ? '/worker/dashboard' : '/tabs/home'" class="text-xl font-bold text-brand">
+      <RouterLink :to="auth.home" class="text-xl font-bold text-brand">
         Trampo Fácil
       </RouterLink>
     </div>
 
-    <div v-if="auth.isWorker" class="px-4 py-2 border-b">
+    <div v-if="auth.inWorkerMode" class="px-4 py-2 border-b">
       <span class="text-xs font-semibold uppercase tracking-wide text-brand bg-brand-50 px-2 py-1 rounded-full">Trabalhador</span>
     </div>
 
@@ -62,13 +67,22 @@ function logout() {
         {{ item.label }}
       </RouterLink>
 
-      <div v-if="auth.isWorker" class="mt-2 pt-2 border-t">
+      <div v-if="auth.token" class="mt-2 pt-2 border-t">
+        <button
+          v-if="auth.isWorker"
+          @click="switchMode"
+          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-50 transition-colors"
+        >
+          <Icon icon="mdi:swap-horizontal" class="text-xl flex-shrink-0" />
+          {{ auth.inWorkerMode ? t('mode.toClient') : t('mode.toWorker') }}
+        </button>
         <RouterLink
-          to="/tabs/home"
+          v-else
+          to="/become-worker"
           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-50 transition-colors"
         >
-          <Icon icon="mdi:magnify" class="text-xl flex-shrink-0" />
-          Ver marketplace
+          <Icon icon="mdi:briefcase-plus-outline" class="text-xl flex-shrink-0" />
+          {{ t('mode.becomeWorker') }}
         </RouterLink>
       </div>
     </nav>

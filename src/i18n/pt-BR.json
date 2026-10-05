@@ -172,5 +172,10 @@
       "portfolio": "Portfólio",
       "contact": "Ligar para"
     }
+  },
+  "mode": {
+    "toClient": "Mudar para modo cliente",
+    "toWorker": "Mudar para modo trabalhador",
+    "becomeWorker": "Quero trabalhar também"
   }
 }

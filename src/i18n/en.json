@@ -172,5 +172,10 @@
       "portfolio": "Portfolio",
       "contact": "Call"
     }
+  },
+  "mode": {
+    "toClient": "Switch to client mode",
+    "toWorker": "Switch to worker mode",
+    "becomeWorker": "I want to work too"
   }
 }

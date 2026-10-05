@@ -15,7 +15,7 @@ const sessionExpired = computed(() => route.query.expired === '1')
 
 async function submit() {
   if (await auth.login(form)) {
-    router.replace(auth.isWorker ? '/worker/dashboard' : '/tabs/home')
+    router.replace(auth.home)
   }
 }
 </script>
