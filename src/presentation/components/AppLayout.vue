@@ -13,7 +13,7 @@ import SidebarNav from './SidebarNav.vue'
     <AppHeader class="lg:hidden" />
 
     <!-- Content -->
-    <main class="lg:pl-60 pt-14 lg:pt-0 pb-20 lg:pb-0">
+    <main class="lg:pl-60 pt-header-safe lg:pt-0 pb-nav-safe lg:pb-0">
       <div class="max-w-4xl mx-auto px-4 py-6">
         <RouterView />
       </div>

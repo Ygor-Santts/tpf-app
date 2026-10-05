@@ -30,6 +30,10 @@ export default {
       addUtilities({
         '.pb-safe': { paddingBottom: 'env(safe-area-inset-bottom, 0px)' },
         '.mb-safe': { marginBottom: 'env(safe-area-inset-bottom, 0px)' },
+        '.pt-safe': { paddingTop: 'env(safe-area-inset-top, 0px)' },
+        // espaço do conteúdo abaixo do header (h-14) e acima da bottom nav (h-20) no mobile
+        '.pt-header-safe': { paddingTop: 'calc(3.5rem + env(safe-area-inset-top, 0px))' },
+        '.pb-nav-safe': { paddingBottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' },
       })
     },
   ],

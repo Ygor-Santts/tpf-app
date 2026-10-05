@@ -1,0 +1,3 @@
+# scripts do Gradle: .bat precisa de CRLF no Windows, gradlew precisa de LF no Linux/WSL
+*.bat text eol=crlf
+android/gradlew text eol=lf

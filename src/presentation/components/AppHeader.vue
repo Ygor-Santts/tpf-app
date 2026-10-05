@@ -22,7 +22,7 @@ function logout() {
 </script>
 
 <template>
-  <header class="fixed top-0 inset-x-0 z-30 h-14 bg-white border-b flex items-center justify-between px-4">
+  <header class="fixed top-0 inset-x-0 z-30 h-14 box-content pt-safe bg-white border-b flex items-center justify-between px-4">
     <RouterLink :to="auth.isWorker ? '/worker/dashboard' : '/tabs/home'" class="flex items-center gap-2">
       <span class="text-lg font-bold text-brand">Trampo Fácil</span>
     </RouterLink>

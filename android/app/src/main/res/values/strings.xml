@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Trampo Fácil</string>
+    <string name="title_activity_main">Trampo Fácil</string>
+    <string name="package_name">com.trampofacil.app</string>
+    <string name="custom_url_scheme">com.trampofacil.app</string>
+</resources>
