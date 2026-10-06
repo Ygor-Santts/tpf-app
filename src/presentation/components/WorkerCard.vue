@@ -2,6 +2,7 @@
 import { Icon } from '@iconify/vue'
 import { useI18n } from 'vue-i18n'
 import StarRating from '@ui/components/StarRating.vue'
+import FeaturedBadge from '@ui/components/FeaturedBadge.vue'
 import { formatPhone } from '@shared/validation'
 const { t } = useI18n()
 
@@ -13,17 +14,24 @@ defineProps<{
   occupations?: string[]
   averageRating?: number
   ratingCount?: number
+  featured?: boolean
 }>()
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl border shadow-card p-4 flex flex-col gap-3 hover:shadow-card-hover transition-shadow">
+  <div
+    class="bg-white rounded-2xl border shadow-card p-4 flex flex-col gap-3 hover:shadow-card-hover transition-shadow"
+    :class="{ 'border-amber-300': featured }"
+  >
     <div class="flex items-start gap-3">
       <div class="h-11 w-11 rounded-full bg-brand-100 flex items-center justify-center text-brand font-bold text-lg flex-shrink-0">
         {{ name?.charAt(0)?.toUpperCase() }}
       </div>
       <div class="flex-1 min-w-0">
-        <div class="font-semibold text-slate-900 truncate">{{ name }}</div>
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="font-semibold text-slate-900 truncate">{{ name }}</span>
+          <FeaturedBadge v-if="featured" class="flex-shrink-0" />
+        </div>
         <div class="flex items-center gap-2 mt-0.5 flex-wrap">
           <div v-if="ratingCount && ratingCount > 0" class="flex items-center gap-1">
             <StarRating :score="Math.round(averageRating ?? 0)" size="w-3 h-3" />

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
 import { searchWorkers, type WorkerSearchParams } from '@infra/services/worker.service'
 import { getCurrentPosition, type Coords } from '@infra/services/location.service'
@@ -12,6 +13,7 @@ import { Icon } from '@iconify/vue'
 
 const { t } = useI18n()
 const tax = useTaxonomyStore()
+const route = useRoute()
 
 const name = ref('')
 const selectedCategory = ref<number | null>(null)
@@ -26,6 +28,13 @@ const searched = ref(false)
 const error = ref<string | null>(null)
 const results = ref<{ data: any[]; page: number; limit: number; total: number } | null>(null)
 const filtersOpen = ref(false)
+// "best" = Melhores no ramo: ranked by rating only, paid Destaque does not count.
+const sort = ref<'best' | undefined>(route.query.sort === 'best' ? 'best' : undefined)
+
+function setSort(value: 'best' | undefined) {
+  sort.value = value
+  run(1)
+}
 
 // The search starts filtered by the user's region. Picking cities by hand wins
 // over the location, and "see all" turns it off.
@@ -88,6 +97,7 @@ async function run(pageNum = 1) {
       jobOccupationIds: selectedOccupationIds.value.length ? selectedOccupationIds.value : undefined,
       operationCitiesIds: selectedCityIds.value.length ? selectedCityIds.value : undefined,
       minRating: minRating.value ?? undefined,
+      sort: sort.value,
       ...(usingLocation.value && coords.value ? { ...coords.value, radiusKm: radiusKm.value } : {}),
     }
     results.value = await searchWorkers(params)
@@ -126,7 +136,22 @@ function workerCities(w: any): string[] {
 
 <template>
   <section class="grid gap-4">
-    <h2 class="text-xl font-bold text-slate-900">{{ t('workers.findProfessionals') }}</h2>
+    <h2 class="text-xl font-bold text-slate-900">{{ sort === 'best' ? t('workers.bestTitle') : t('workers.findProfessionals') }}</h2>
+
+    <div class="flex items-center gap-2 flex-wrap">
+      <button
+        v-for="option in [undefined, 'best'] as const"
+        :key="option ?? 'all'"
+        type="button"
+        @click="setSort(option)"
+        class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-medium transition-colors"
+        :class="sort === option ? 'bg-brand text-white border-brand' : 'bg-white text-slate-600 hover:border-brand hover:text-brand'"
+      >
+        <Icon :icon="option ? 'mdi:trophy-outline' : 'mdi:account-group-outline'" />
+        {{ option ? t('workers.sortBest') : t('workers.sortAll') }}
+      </button>
+      <span v-if="sort === 'best'" class="text-xs text-slate-500">{{ t('workers.bestHint') }}</span>
+    </div>
 
     <!-- Search bar -->
     <div class="flex gap-2">
@@ -280,6 +305,16 @@ function workerCities(w: any): string[] {
 
         <!-- Empty state -->
         <EmptyState
+          v-else-if="searched && results && results.data.length === 0 && sort === 'best'"
+          icon="mdi:trophy-outline"
+          :title="t('workers.noBest')"
+          :description="t('workers.noBestDesc')"
+        >
+          <button @click="setSort(undefined)" class="px-4 py-2 rounded-xl border text-sm text-brand border-brand hover:bg-brand-50 transition-colors">
+            {{ t('workers.sortAll') }}
+          </button>
+        </EmptyState>
+        <EmptyState
           v-else-if="searched && results && results.data.length === 0 && usingLocation"
           icon="mdi:map-marker-radius-outline"
           :title="t('workers.noneNearby')"
@@ -318,6 +353,7 @@ function workerCities(w: any): string[] {
               :cities="workerCities(w)"
               :average-rating="w.averageRating"
               :rating-count="w.ratingCount"
+              :featured="w.featured && sort !== 'best'"
             />
           </div>
 

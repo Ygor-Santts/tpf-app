@@ -1,6 +1,8 @@
 export interface WorkerProfile {
   id: number
   bio?: string
+  /** Paid Destaque end date, only while it is active. */
+  featuredUntil?: string | null
   user: { id: number; name: string; email: string; phone: string }
   jobOccupations: { id: number; name: string; category: { id: number; name: string } }[]
   operationCities: { id: number; name: string }[]
