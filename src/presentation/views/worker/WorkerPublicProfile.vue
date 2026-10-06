@@ -7,6 +7,7 @@ import { Icon } from '@iconify/vue'
 import StarRating from '@ui/components/StarRating.vue'
 import FeaturedBadge from '@ui/components/FeaturedBadge.vue'
 import type { PortfolioItem, Rating, RatingSummary } from '@domain/worker'
+import { formatPhone, whatsappUrl } from '@shared/validation'
 
 const props = defineProps<{ id: string }>()
 const auth = useAuthStore()
@@ -110,14 +111,25 @@ async function sendRating() {
       </div>
 
       <!-- Contact -->
-      <a
-        v-if="worker.user?.phone"
-        :href="`tel:${worker.user.phone}`"
-        class="flex items-center justify-center gap-2 py-3 rounded-xl bg-brand text-white font-semibold hover:bg-brand-dark transition-colors"
-      >
-        <Icon icon="mdi:phone" />
-        {{ worker.user.phone }}
-      </a>
+      <div v-if="worker.user?.phone" class="grid gap-2">
+        <a
+          v-if="whatsappUrl(worker.user.phone, worker.user.name)"
+          :href="whatsappUrl(worker.user.phone, worker.user.name)"
+          target="_blank"
+          rel="noopener"
+          class="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors"
+        >
+          <Icon icon="mdi:whatsapp" class="text-lg" />
+          Chamar no WhatsApp
+        </a>
+        <a
+          :href="`tel:${worker.user.phone}`"
+          class="flex items-center justify-center gap-2 py-3 rounded-xl border text-slate-700 font-semibold hover:border-brand hover:text-brand transition-colors"
+        >
+          <Icon icon="mdi:phone" />
+          Ligar {{ formatPhone(worker.user.phone) }}
+        </a>
+      </div>
 
       <!-- Portfolio -->
       <div v-if="portfolio.length" class="grid gap-3">

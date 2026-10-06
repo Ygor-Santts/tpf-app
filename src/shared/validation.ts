@@ -25,6 +25,14 @@ export function phoneDigits(value: string) {
   return digits.length > 11 && digits.startsWith('55') ? digits.slice(2) : digits
 }
 
+// WhatsApp click-to-chat link with a ready message, or '' for a landline.
+export function whatsappUrl(phone: string, name: string) {
+  const d = phoneDigits(phone)
+  if (!/^[1-9][0-9]9\d{8}$/.test(d)) return ''
+  const text = `Olá, ${name.trim().split(' ')[0]}! Vi seu perfil no Trampo Fácil e gostaria de um orçamento.`
+  return `https://wa.me/55${d}?text=${encodeURIComponent(text)}`
+}
+
 // "34999999999" -> "(34) 99999-9999", also while the person is typing.
 export function formatPhone(value: string) {
   const d = phoneDigits(value).slice(0, 11)
