@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mediaUrl } from '@infra/http'
 import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '@app/stores/auth'
 import { getWorkerPortfolio, getWorkerRatings, getWorkerRatingSummary, submitRating } from '@infra/services/profile.service'
@@ -23,11 +24,6 @@ const submitting = ref(false)
 const submitted = ref(false)
 const ratingError = ref('')
 
-const API_BASE = (import.meta as any).env?.VITE_API_URL ?? 'http://localhost:3000'
-
-function mediaUrl(url: string) {
-  return url.startsWith('http') ? url : `${API_BASE}${url}`
-}
 
 onMounted(async () => {
   const workerId = Number(props.id)

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mediaUrl } from '@infra/http'
 import { ref, onMounted } from 'vue'
 import { useWorkerStore } from '@app/stores/worker'
 import { Icon } from '@iconify/vue'
@@ -17,11 +18,6 @@ onMounted(async () => {
   if (worker.profile) await worker.loadPortfolio(worker.profile.id)
 })
 
-const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
-
-function mediaUrl(url: string) {
-  return url.startsWith('http') ? url : `${API_BASE}${url}`
-}
 
 async function onFileChange(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0]
