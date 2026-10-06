@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { signIn, workerSignUp, clientSignUp, activateWorker } from '@infra/services/auth.service'
+import { apiError } from '@shared/validation'
 import type { LoginDTO, RegisterWorkerDTO, RegisterClientDTO, ActivateWorkerDTO, UserProfile, AppMode, LoginResponse } from '@domain/auth'
 
 const loadUser = (): UserProfile | null => {
@@ -22,6 +23,8 @@ export const useAuthStore = defineStore('auth', {
     mode: loadMode(loadUser()),
     loading: false,
     error: null as string | null,
+    // Per-field messages from the API, shown under each field by the form.
+    fieldErrors: {} as Record<string, string>,
   }),
   getters: {
     isWorker: (state) => Boolean(state.user?.isWorker),
@@ -30,12 +33,12 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async login(dto: LoginDTO) {
-      this.loading = true; this.error = null
+      this.loading = true; this.error = null; this.fieldErrors = {}
       try {
         this.setSession(await signIn(dto))
         return true
       } catch (e: any) {
-        this.error = e?.response?.data?.message || 'Login failed'
+        this.fail(e, 'Não foi possível entrar. Tente novamente.')
         return false
       } finally { this.loading = false }
     },
@@ -45,6 +48,11 @@ export const useAuthStore = defineStore('auth', {
       this.mode = loadMode(user)
       localStorage.setItem('tpf_token', access_token)
       localStorage.setItem('tpf_user', JSON.stringify(user))
+    },
+    fail(e: unknown, fallback: string) {
+      const { message, fields } = apiError(e, fallback)
+      this.error = message
+      this.fieldErrors = fields
     },
     setMode(mode: AppMode) {
       this.mode = this.isWorker ? mode : 'client'
@@ -59,26 +67,26 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('tpf_mode')
     },
     async activateWorker(dto: ActivateWorkerDTO) {
-      this.loading = true; this.error = null
+      this.loading = true; this.error = null; this.fieldErrors = {}
       try {
         this.setSession(await activateWorker(dto))
         this.setMode('worker')
         return true
       } catch (e: any) {
-        this.error = e?.response?.data?.message || 'Register failed'
+        this.fail(e, 'Não foi possível concluir o cadastro. Tente novamente.')
         return false
       } finally { this.loading = false }
     },
     async registerWorker(dto: RegisterWorkerDTO) {
-      this.loading = true; this.error = null
+      this.loading = true; this.error = null; this.fieldErrors = {}
       try { await workerSignUp(dto); return true }
-      catch (e: any) { this.error = e?.response?.data?.message || 'Register failed'; return false }
+      catch (e: any) { this.fail(e, 'Não foi possível concluir o cadastro. Tente novamente.'); return false }
       finally { this.loading = false }
     },
     async registerClient(dto: RegisterClientDTO) {
-      this.loading = true; this.error = null
+      this.loading = true; this.error = null; this.fieldErrors = {}
       try { await clientSignUp(dto); return true }
-      catch (e: any) { this.error = e?.response?.data?.message || 'Register failed'; return false }
+      catch (e: any) { this.fail(e, 'Não foi possível concluir o cadastro. Tente novamente.'); return false }
       finally { this.loading = false }
     },
   },

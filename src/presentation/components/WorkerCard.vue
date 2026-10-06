@@ -2,6 +2,7 @@
 import { Icon } from '@iconify/vue'
 import { useI18n } from 'vue-i18n'
 import StarRating from '@ui/components/StarRating.vue'
+import { formatPhone } from '@shared/validation'
 const { t } = useI18n()
 
 defineProps<{
@@ -30,7 +31,7 @@ defineProps<{
           </div>
           <div v-if="phone" class="flex items-center gap-1 text-xs text-slate-500">
             <Icon icon="mdi:phone-outline" class="text-sm" />
-            {{ phone }}
+            {{ formatPhone(phone) }}
           </div>
         </div>
       </div>

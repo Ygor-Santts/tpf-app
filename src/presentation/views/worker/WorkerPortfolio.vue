@@ -55,7 +55,7 @@ async function remove(id: number) {
     <!-- Upload -->
     <div class="bg-white rounded-2xl border shadow-card p-5 grid gap-3">
       <h3 class="font-semibold text-slate-800 text-sm">Adicionar trabalho</h3>
-      <input v-model="caption" placeholder="Descrição (opcional)" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100" />
+      <input v-model="caption" maxlength="200" placeholder="Descrição (opcional)" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100" />
       <label class="flex items-center justify-center gap-2 py-3 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:border-brand hover:bg-brand-50 transition-colors text-sm text-slate-500">
         <Icon v-if="uploading" icon="mdi:loading" class="animate-spin text-brand" />
         <Icon v-else icon="mdi:cloud-upload-outline" class="text-xl text-slate-400" />

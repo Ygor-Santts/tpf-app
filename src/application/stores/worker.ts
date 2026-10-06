@@ -4,6 +4,7 @@ import {
   uploadPortfolioItem, deletePortfolioItem,
   getWorkerRatings, getWorkerRatingSummary, submitRating,
 } from '@infra/services/profile.service'
+import { apiError } from '@shared/validation'
 import type { WorkerProfile, PortfolioItem, Rating, RatingSummary } from '@domain/worker'
 
 export const useWorkerStore = defineStore('worker', {
@@ -16,18 +17,25 @@ export const useWorkerStore = defineStore('worker', {
     ratingsPage: 1,
     loading: false,
     error: null as string | null,
+    // Per-field messages from the API, shown under each field by the form.
+    fieldErrors: {} as Record<string, string>,
   }),
   actions: {
+    fail(e: unknown, fallback: string) {
+      const { message, fields } = apiError(e, fallback)
+      this.error = message
+      this.fieldErrors = fields
+    },
     async loadProfile() {
       this.loading = true
       try { this.profile = await getWorkerMe() }
-      catch (e: any) { this.error = e?.response?.data?.message || 'Erro ao carregar perfil' }
+      catch (e: any) { this.fail(e, 'Erro ao carregar perfil') }
       finally { this.loading = false }
     },
     async loadPortfolio(workerId: number) {
       this.loading = true
       try { this.portfolio = await getWorkerPortfolio(workerId) }
-      catch (e: any) { this.error = e?.response?.data?.message || 'Erro ao carregar portfólio' }
+      catch (e: any) { this.fail(e, 'Erro ao carregar portfólio') }
       finally { this.loading = false }
     },
     async loadRatings(workerId: number, page = 1) {
@@ -37,7 +45,7 @@ export const useWorkerStore = defineStore('worker', {
         this.ratings = result.data
         this.ratingsTotal = result.total
         this.ratingsPage = page
-      } catch (e: any) { this.error = e?.response?.data?.message || 'Erro ao carregar avaliações' }
+      } catch (e: any) { this.fail(e, 'Erro ao carregar avaliações') }
       finally { this.loading = false }
     },
     async loadRatingSummary(workerId: number) {
@@ -45,12 +53,12 @@ export const useWorkerStore = defineStore('worker', {
       catch {}
     },
     async uploadItem(file: File, caption?: string) {
-      this.loading = true
+      this.loading = true; this.error = null
       try {
         const item = await uploadPortfolioItem(file, caption)
         this.portfolio.unshift(item)
         return true
-      } catch (e: any) { this.error = e?.response?.data?.message || 'Erro no upload'; return false }
+      } catch (e: any) { this.fail(e, 'Erro no upload'); return false }
       finally { this.loading = false }
     },
     async deleteItem(id: number) {
@@ -58,9 +66,9 @@ export const useWorkerStore = defineStore('worker', {
       this.portfolio = this.portfolio.filter(i => i.id !== id)
     },
     async updateProfile(dto: Partial<WorkerProfile & { name: string; phone: string; jobOccupationIds: number[]; operationCitiesIds: number[] }>) {
-      this.loading = true
+      this.loading = true; this.error = null; this.fieldErrors = {}
       try { await updateWorkerProfile(dto); await this.loadProfile(); return true }
-      catch (e: any) { this.error = e?.response?.data?.message || 'Erro ao atualizar perfil'; return false }
+      catch (e: any) { this.fail(e, 'Erro ao atualizar perfil'); return false }
       finally { this.loading = false }
     },
     async submitRating(workerId: number, score: number, comment?: string) {

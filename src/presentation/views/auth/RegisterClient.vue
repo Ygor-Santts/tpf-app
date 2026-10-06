@@ -1,21 +1,38 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@app/stores/auth'
 import { Icon } from '@iconify/vue'
+import IconInput from '@ui/components/IconInput.vue'
+import { useValidation, required, email, phone, minLength, sameAs, formatPhone, phoneDigits, PASSWORD_MIN } from '@shared/validation'
 
 const router = useRouter()
 const auth = useAuthStore()
+auth.error = null
 
-const name = ref('')
-const email = ref('')
-const phone = ref('')
-const password = ref('')
+const form = reactive({ name: '', email: '', phone: '', password: '', confirm: '' })
 const success = ref(false)
 
+const { errors, check, validate, setErrors } = useValidation(form, {
+  name: [required('Informe seu nome.')],
+  email: [required('Informe seu e-mail.'), email],
+  phone: [required('Informe seu telefone.'), phone],
+  password: [required('Crie uma senha.'), minLength(PASSWORD_MIN)],
+  confirm: [required('Repita a senha.'), sameAs(() => form.password, 'As senhas não coincidem.')],
+})
+
+watch(() => form.phone, (v) => (form.phone = formatPhone(v)))
+
 async function submit() {
-  const ok = await auth.registerClient({ name: name.value, email: email.value, phone: phone.value, password: password.value })
+  if (!(await validate())) return
+  const ok = await auth.registerClient({
+    name: form.name.trim(),
+    email: form.email.trim(),
+    phone: phoneDigits(form.phone),
+    password: form.password,
+  })
   if (ok) success.value = true
+  else setErrors(auth.fieldErrors)
 }
 </script>
 
@@ -38,25 +55,16 @@ async function submit() {
         </button>
       </div>
 
-      <form v-else @submit.prevent="submit" class="grid gap-4">
-        <div class="relative">
-          <Icon icon="mdi:account-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input v-model="name" placeholder="Nome completo" required class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all" />
-        </div>
-        <div class="relative">
-          <Icon icon="mdi:email-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input v-model="email" type="email" placeholder="E-mail" required class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all" />
-        </div>
-        <div class="relative">
-          <Icon icon="mdi:phone-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input v-model="phone" placeholder="Telefone" required class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all" />
-        </div>
-        <div class="relative">
-          <Icon icon="mdi:lock-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input v-model="password" type="password" placeholder="Senha" required minlength="6" class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all" />
-        </div>
+      <form v-else @submit.prevent="submit" novalidate class="grid gap-4">
+        <IconInput v-model="form.name" icon="mdi:account-outline" placeholder="Nome completo" autocomplete="name" :error="errors.name" @blur="check('name')" />
+        <IconInput v-model="form.email" icon="mdi:email-outline" type="email" placeholder="E-mail" autocomplete="email" :error="errors.email" @blur="check('email')" />
+        <IconInput v-model="form.phone" icon="mdi:phone-outline" type="tel" inputmode="numeric" placeholder="Telefone com DDD" autocomplete="tel-national" :error="errors.phone" @blur="check('phone')" />
+        <IconInput v-model="form.password" icon="mdi:lock-outline" type="password" placeholder="Senha (mínimo 8 caracteres)" autocomplete="new-password" :error="errors.password" @blur="check('password')" />
+        <IconInput v-model="form.confirm" icon="mdi:lock-check-outline" type="password" placeholder="Repita a senha" autocomplete="new-password" :error="errors.confirm" @blur="check('confirm')" />
 
-        <p v-if="auth.error" class="text-red-500 text-sm text-center">{{ auth.error }}</p>
+        <div v-if="auth.error" class="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+          <Icon icon="mdi:alert-circle-outline" class="flex-shrink-0" />{{ auth.error }}
+        </div>
 
         <button type="submit" :disabled="auth.loading" class="w-full py-3 rounded-xl bg-brand text-white font-semibold hover:bg-brand-dark transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
           <Icon v-if="auth.loading" icon="mdi:loading" class="animate-spin" />

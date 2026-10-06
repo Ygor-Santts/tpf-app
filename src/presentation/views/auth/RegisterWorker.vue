@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import CityPicker from '@ui/components/CityPicker.vue'
-import { reactive, ref, onMounted, computed } from 'vue'
+import { reactive, ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@app/stores/auth'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 import StepIndicator from '@ui/components/StepIndicator.vue'
+import IconInput from '@ui/components/IconInput.vue'
+import FieldError from '@ui/components/FieldError.vue'
+import { useValidation, required, email, phone, minLength, sameAs, formatPhone, phoneDigits, PASSWORD_MIN } from '@shared/validation'
 
 // upgrade: a logged-in client adds a worker profile, so the personal-data step is skipped.
 const props = defineProps<{ upgrade?: boolean }>()
@@ -14,6 +17,7 @@ const props = defineProps<{ upgrade?: boolean }>()
 const { t } = useI18n()
 const router = useRouter()
 const auth = useAuthStore()
+auth.error = null
 const tax = useTaxonomyStore()
 
 const firstStep = props.upgrade ? 2 : 1
@@ -24,12 +28,34 @@ const form = reactive({
   name: '',
   email: '',
   password: '',
+  confirm: '',
   phone: '',
   jobCategoryId: 0,
   jobOccupationIds: [] as number[],
   stateCode: '',
   operationCitiesIds: [] as number[],
 })
+
+const { errors, check, validate, setErrors } = useValidation(form, {
+  name: [required('Informe seu nome.')],
+  email: [required('Informe seu e-mail.'), email],
+  phone: [required('Informe seu telefone.'), phone],
+  password: [required('Crie uma senha.'), minLength(PASSWORD_MIN)],
+  confirm: [required('Repita a senha.'), sameAs(() => form.password, 'As senhas não coincidem.')],
+  jobCategoryId: [(v) => (v ? '' : 'Escolha uma categoria.')],
+  jobOccupationIds: [required('Escolha pelo menos uma ocupação.')],
+  stateCode: [required('Escolha um estado.')],
+  operationCitiesIds: [required('Escolha pelo menos uma cidade.')],
+})
+
+// Fields checked before leaving each step.
+const STEP_FIELDS: Record<number, string[]> = {
+  1: ['name', 'email', 'phone', 'password', 'confirm'],
+  2: ['jobCategoryId', 'jobOccupationIds'],
+  3: ['stateCode', 'operationCitiesIds'],
+}
+
+watch(() => form.phone, (v) => (form.phone = formatPhone(v)))
 
 onMounted(async () => {
   await tax.loadCategories()
@@ -52,12 +78,8 @@ async function onStateChange() {
   if (form.stateCode) await tax.loadCities(form.stateCode)
 }
 
-const step1Valid = computed(() => form.name && form.email && form.password && form.phone)
-const step2Valid = computed(() => form.jobOccupationIds.length > 0)
-const step3Valid = computed(() => form.operationCitiesIds.length > 0)
-
-function nextStep() {
-  if (currentStep.value < 3) currentStep.value++
+async function nextStep() {
+  if (await validate(STEP_FIELDS[currentStep.value])) currentStep.value++
 }
 
 function prevStep() {
@@ -66,27 +88,30 @@ function prevStep() {
 }
 
 async function submit() {
-  if (!step3Valid.value) return
-  if (props.upgrade) {
-    const ok = await auth.activateWorker({
+  if (!(await validate(STEP_FIELDS[3]))) return
+  const ok = props.upgrade
+    ? await auth.activateWorker({
       jobOccupationIds: form.jobOccupationIds,
       operationCitiesIds: form.operationCitiesIds,
     })
-    if (ok) router.replace('/worker/profile/edit')
+    : await auth.registerWorker({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      password: form.password,
+      phone: phoneDigits(form.phone),
+      jobOccupationIds: form.jobOccupationIds,
+      operationCitiesIds: form.operationCitiesIds,
+    })
+  if (!ok) {
+    // An error in an earlier step's field takes the person back to that step.
+    const step = [1, 2].find((n) => STEP_FIELDS[n].some((f) => auth.fieldErrors[f]))
+    if (step && step >= firstStep) currentStep.value = step
+    setErrors(auth.fieldErrors)
     return
   }
-  await auth.registerWorker({
-    name: form.name,
-    email: form.email,
-    password: form.password,
-    phone: form.phone,
-    jobOccupationIds: form.jobOccupationIds,
-    operationCitiesIds: form.operationCitiesIds,
-  })
-  if (!auth.error) {
-    success.value = true
-    setTimeout(() => router.replace('/login'), 2000)
-  }
+  if (props.upgrade) return router.replace('/worker/profile/edit')
+  success.value = true
+  setTimeout(() => router.replace('/login'), 2000)
 }
 
 const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('auth.step3Label')].slice(firstStep - 1))
@@ -114,36 +139,26 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
         </div>
 
         <!-- Step 1: Dados pessoais -->
-        <div v-else-if="currentStep === 1" class="grid gap-3">
-          <div class="relative">
-            <Icon icon="mdi:account-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" />
-            <input v-model="form.name" :placeholder="t('auth.fullName')" class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all" />
-          </div>
-          <div class="relative">
-            <Icon icon="mdi:email-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" />
-            <input v-model="form.email" type="email" :placeholder="t('auth.email')" class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all" />
-          </div>
-          <div class="relative">
-            <Icon icon="mdi:phone-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" />
-            <input v-model="form.phone" :placeholder="t('auth.phone')" class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all" />
-          </div>
-          <div class="relative">
-            <Icon icon="mdi:lock-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" />
-            <input v-model="form.password" type="password" :placeholder="t('auth.password')" class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all" />
-          </div>
-          <button @click="nextStep" :disabled="!step1Valid" class="w-full py-3 rounded-xl bg-brand text-white font-semibold text-sm hover:bg-brand-dark transition-colors disabled:opacity-50">
+        <form v-else-if="currentStep === 1" @submit.prevent="nextStep" novalidate class="grid gap-3">
+          <IconInput v-model="form.name" icon="mdi:account-outline" :placeholder="t('auth.fullName')" autocomplete="name" :error="errors.name" @blur="check('name')" />
+          <IconInput v-model="form.email" icon="mdi:email-outline" type="email" :placeholder="t('auth.email')" autocomplete="email" :error="errors.email" @blur="check('email')" />
+          <IconInput v-model="form.phone" icon="mdi:phone-outline" type="tel" inputmode="numeric" placeholder="Telefone com DDD" autocomplete="tel-national" :error="errors.phone" @blur="check('phone')" />
+          <IconInput v-model="form.password" icon="mdi:lock-outline" type="password" placeholder="Senha (mínimo 8 caracteres)" autocomplete="new-password" :error="errors.password" @blur="check('password')" />
+          <IconInput v-model="form.confirm" icon="mdi:lock-check-outline" type="password" placeholder="Repita a senha" autocomplete="new-password" :error="errors.confirm" @blur="check('confirm')" />
+          <button class="w-full py-3 rounded-xl bg-brand text-white font-semibold text-sm hover:bg-brand-dark transition-colors">
             {{ t('auth.continue') }}
           </button>
-        </div>
+        </form>
 
         <!-- Step 2: Habilidades -->
         <div v-else-if="currentStep === 2" class="grid gap-4">
           <div class="grid gap-1.5">
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('auth.category') }}</label>
-            <select v-model.number="form.jobCategoryId" @change="onCategoryChange" class="border rounded-xl px-3 py-3 text-sm cursor-pointer focus:outline-none focus:border-brand">
+            <select v-model.number="form.jobCategoryId" @change="onCategoryChange" :aria-invalid="!!errors.jobCategoryId" class="border rounded-xl px-3 py-3 text-sm cursor-pointer focus:outline-none focus:border-brand">
               <option :value="0" disabled>{{ t('auth.select') }}</option>
               <option v-for="c in tax.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
             </select>
+            <FieldError :message="errors.jobCategoryId" />
           </div>
           <div v-if="form.jobCategoryId" class="grid gap-2">
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('auth.occupations') }}</label>
@@ -159,11 +174,11 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
                 {{ o.name }}
               </button>
             </div>
-            <p v-if="!step2Valid" class="text-xs text-red-500">{{ t('auth.selectAtLeastOne') }}</p>
+            <FieldError :message="errors.jobOccupationIds" />
           </div>
           <div class="flex gap-2 mt-1">
             <button @click="prevStep" class="flex-1 py-3 rounded-xl border text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">{{ t('common.back') }}</button>
-            <button @click="nextStep" :disabled="!step2Valid" class="flex-1 py-3 rounded-xl bg-brand text-white font-semibold text-sm hover:bg-brand-dark transition-colors disabled:opacity-50">{{ t('auth.continue') }}</button>
+            <button @click="nextStep" class="flex-1 py-3 rounded-xl bg-brand text-white font-semibold text-sm hover:bg-brand-dark transition-colors">{{ t('auth.continue') }}</button>
           </div>
         </div>
 
@@ -171,20 +186,23 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
         <div v-else class="grid gap-4">
           <div class="grid gap-1.5">
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('auth.state') }}</label>
-            <select v-model="form.stateCode" @change="onStateChange" class="border rounded-xl px-3 py-3 text-sm cursor-pointer focus:outline-none focus:border-brand">
+            <select v-model="form.stateCode" @change="onStateChange" :aria-invalid="!!errors.stateCode" class="border rounded-xl px-3 py-3 text-sm cursor-pointer focus:outline-none focus:border-brand">
               <option value="" disabled>{{ t('auth.select') }}</option>
               <option v-for="s in tax.states" :key="s.code" :value="s.code">{{ s.name }}</option>
             </select>
+            <FieldError :message="errors.stateCode" />
           </div>
           <div v-if="form.stateCode" class="grid gap-2">
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('auth.cities') }}</label>
             <CityPicker v-model="form.operationCitiesIds" :cities="tax.citiesByState[form.stateCode] || []" />
-            <p v-if="!step3Valid" class="text-xs text-red-500">{{ t('auth.selectAtLeastOne') }}</p>
+            <FieldError :message="errors.operationCitiesIds" />
           </div>
-          <p v-if="auth.error" class="text-red-500 text-sm">{{ auth.error }}</p>
+          <div v-if="auth.error" class="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+            <Icon icon="mdi:alert-circle-outline" class="flex-shrink-0" />{{ auth.error }}
+          </div>
           <div class="flex gap-2 mt-1">
             <button @click="prevStep" class="flex-1 py-3 rounded-xl border text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">{{ t('common.back') }}</button>
-            <button @click="submit" :disabled="auth.loading || !step3Valid" class="flex-1 py-3 rounded-xl bg-brand text-white font-semibold text-sm hover:bg-brand-dark transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+            <button @click="submit" :disabled="auth.loading" class="flex-1 py-3 rounded-xl bg-brand text-white font-semibold text-sm hover:bg-brand-dark transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
               <Icon v-if="auth.loading" icon="mdi:loading" class="animate-spin" />
               {{ auth.loading ? t('auth.sending') : t('auth.finish') }}
             </button>

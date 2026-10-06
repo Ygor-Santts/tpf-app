@@ -1,29 +1,36 @@
 <script setup lang="ts">
 import CityPicker from '@ui/components/CityPicker.vue'
-import { ref, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useWorkerStore } from '@app/stores/worker'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
 import { Icon } from '@iconify/vue'
+import FieldError from '@ui/components/FieldError.vue'
+import { useValidation, required, phone, formatPhone, phoneDigits } from '@shared/validation'
 
 const worker = useWorkerStore()
 const tax = useTaxonomyStore()
 
-const bio = ref('')
-const name = ref('')
-const phone = ref('')
+const form = reactive({ name: '', phone: '', bio: '' })
 const selectedOccupationIds = ref<number[]>([])
 const selectedCityIds = ref<number[]>([])
 const selectedCategory = ref<number | null>(null)
 const selectedState = ref('')
 const saved = ref(false)
 
+const { errors, check, validate, setErrors } = useValidation(form, {
+  name: [required('Informe seu nome.')],
+  phone: [required('Informe seu telefone.'), phone],
+})
+
+watch(() => form.phone, (v) => (form.phone = formatPhone(v)))
+
 onMounted(async () => {
   await worker.loadProfile()
   await Promise.all([tax.loadCategories(), tax.loadStates()])
   if (worker.profile) {
-    bio.value = worker.profile.bio ?? ''
-    name.value = worker.profile.user.name
-    phone.value = worker.profile.user.phone
+    form.bio = worker.profile.bio ?? ''
+    form.name = worker.profile.user.name
+    form.phone = formatPhone(worker.profile.user.phone)
     selectedOccupationIds.value = worker.profile.jobOccupations.map(o => o.id)
   }
 })
@@ -46,15 +53,19 @@ async function onStateChange() {
 
 async function save() {
   saved.value = false
+  if (!(await validate())) return
   const dto: any = {}
-  if (bio.value !== (worker.profile?.bio ?? '')) dto.bio = bio.value
-  if (name.value !== worker.profile?.user.name) dto.name = name.value
-  if (phone.value !== worker.profile?.user.phone) dto.phone = phone.value
+  const newName = form.name.trim()
+  const newPhone = phoneDigits(form.phone)
+  if (form.bio !== (worker.profile?.bio ?? '')) dto.bio = form.bio
+  if (newName !== worker.profile?.user.name) dto.name = newName
+  if (newPhone !== phoneDigits(worker.profile?.user.phone ?? '')) dto.phone = newPhone
   if (selectedOccupationIds.value.length) dto.jobOccupationIds = selectedOccupationIds.value
   if (selectedCityIds.value.length) dto.operationCitiesIds = selectedCityIds.value
 
   const ok = await worker.updateProfile(dto)
   if (ok) saved.value = true
+  else setErrors(worker.fieldErrors)
 }
 
 const currentOccupations = computed(() => worker.profile?.jobOccupations ?? [])
@@ -77,23 +88,25 @@ const currentCities = computed(() => worker.profile?.operationCities ?? [])
       <div v-for="i in 4" :key="i" class="h-12 rounded-xl bg-slate-100 animate-pulse" />
     </div>
 
-    <form v-else @submit.prevent="save" class="grid gap-5">
+    <form v-else @submit.prevent="save" novalidate class="grid gap-5">
       <div class="bg-white rounded-2xl border shadow-card p-5 grid gap-4">
         <h3 class="font-semibold text-slate-800 text-sm">Dados pessoais</h3>
         <div class="grid gap-3">
           <div>
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1 block">Nome</label>
-            <input v-model="name" class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100" />
+            <input v-model="form.name" autocomplete="name" :aria-invalid="!!errors.name" @blur="check('name')" class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100" />
+            <FieldError :message="errors.name" />
           </div>
           <div>
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1 block">Telefone</label>
-            <input v-model="phone" class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100" />
+            <input v-model="form.phone" type="tel" inputmode="numeric" placeholder="(34) 99999-9999" autocomplete="tel-national" :aria-invalid="!!errors.phone" @blur="check('phone')" class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100" />
+            <FieldError :message="errors.phone" />
           </div>
           <div>
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1 block">Bio</label>
-            <textarea v-model="bio" rows="3" maxlength="500" placeholder="Fale sobre você e seu trabalho..."
+            <textarea v-model="form.bio" rows="3" maxlength="500" placeholder="Fale sobre você e seu trabalho..."
               class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 resize-none" />
-            <div class="text-right text-xs text-slate-400 mt-0.5">{{ bio.length }}/500</div>
+            <div class="text-right text-xs text-slate-400 mt-0.5">{{ form.bio.length }}/500</div>
           </div>
         </div>
       </div>

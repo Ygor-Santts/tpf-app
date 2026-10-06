@@ -1,19 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 import { forgotPassword } from '@infra/services/auth.service'
+import IconInput from '@ui/components/IconInput.vue'
+import { useValidation, required, email } from '@shared/validation'
 
 const { t } = useI18n()
-const email = ref('')
+const form = reactive({ email: '' })
+const { errors, check, validate } = useValidation(form, {
+  email: [required('Informe seu e-mail.'), email],
+})
 const loading = ref(false)
 const message = ref<string | null>(null)
 
 async function submit() {
+  if (!(await validate())) return
   loading.value = true
   message.value = null
   try {
-    await forgotPassword(email.value)
+    await forgotPassword(form.email.trim())
   } catch {
     // always show success to avoid email enumeration
   } finally {
@@ -40,17 +46,8 @@ async function submit() {
 
         <p class="text-sm text-slate-500">Digite seu e-mail e enviaremos as instruções para redefinir sua senha.</p>
 
-        <form @submit.prevent="submit" class="grid gap-3">
-          <div class="relative">
-            <Icon icon="mdi:email-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" />
-            <input
-              v-model="email"
-              type="email"
-              :placeholder="t('auth.email')"
-              class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all"
-              required
-            />
-          </div>
+        <form @submit.prevent="submit" novalidate class="grid gap-3">
+          <IconInput v-model="form.email" icon="mdi:email-outline" type="email" :placeholder="t('auth.email')" autocomplete="email" :error="errors.email" @blur="check('email')" />
 
           <div v-if="message" class="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm">
             <Icon icon="mdi:check-circle" class="text-lg flex-shrink-0" />
