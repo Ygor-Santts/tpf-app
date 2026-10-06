@@ -3,7 +3,7 @@ import { Icon } from '@iconify/vue'
 import { useI18n } from 'vue-i18n'
 import StarRating from '@ui/components/StarRating.vue'
 import FeaturedBadge from '@ui/components/FeaturedBadge.vue'
-import { formatPhone } from '@shared/validation'
+import { formatPhone, whatsappUrl } from '@shared/validation'
 const { t } = useI18n()
 
 defineProps<{
@@ -70,12 +70,22 @@ defineProps<{
         {{ t('workers.viewProfile') }}
       </RouterLink>
       <a
-        v-if="phone"
+        v-if="phone && whatsappUrl(phone, name)"
+        :href="whatsappUrl(phone, name)"
+        target="_blank"
+        rel="noopener"
+        class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition-colors"
+      >
+        <Icon icon="mdi:whatsapp" class="text-base" />
+        {{ t('workers.whatsapp') }}
+      </a>
+      <a
+        v-else-if="phone"
         :href="`tel:${phone}`"
         class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand text-white text-sm font-medium hover:bg-brand-dark transition-colors"
       >
         <Icon icon="mdi:phone" class="text-base" />
-        {{ t('workers.contact') }}
+        {{ t('workers.call') }}
       </a>
     </div>
   </div>
