@@ -207,6 +207,10 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
               {{ auth.loading ? t('auth.sending') : t('auth.finish') }}
             </button>
           </div>
+          <p v-if="!upgrade" class="text-xs text-center text-slate-500">
+            Ao criar a conta você concorda com a
+            <RouterLink to="/privacidade" class="text-brand font-medium hover:underline">Política de Privacidade</RouterLink>.
+          </p>
         </div>
 
         <div v-if="!upgrade" class="text-center text-xs text-slate-500 pt-1 border-t">

@@ -91,6 +91,24 @@ function switchMode() {
               {{ t('mode.becomeWorker') }}
             </RouterLink>
 
+            <RouterLink
+              to="/privacidade"
+              @click="closeMenu"
+              class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              <Icon icon="mdi:shield-account-outline" class="text-lg text-slate-400" />
+              Privacidade
+            </RouterLink>
+
+            <RouterLink
+              to="/delete-account"
+              @click="closeMenu"
+              class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              <Icon icon="mdi:account-remove-outline" class="text-lg text-slate-400" />
+              Excluir conta
+            </RouterLink>
+
             <button
               @click="logout"
               class="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"

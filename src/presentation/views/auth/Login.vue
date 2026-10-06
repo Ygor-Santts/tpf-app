@@ -19,6 +19,7 @@ const { errors, check, validate } = useValidation(form, {
 auth.error = null
 
 const sessionExpired = computed(() => route.query.expired === '1')
+const accountDeleted = computed(() => route.query.deleted === '1')
 
 async function submit() {
   if (!(await validate())) return
@@ -39,6 +40,11 @@ async function submit() {
       <div v-if="sessionExpired" class="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-sm mb-2">
         <Icon icon="mdi:clock-alert-outline" class="flex-shrink-0" />
         Sua sessão expirou. Faça login novamente.
+      </div>
+
+      <div v-if="accountDeleted" class="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm mb-2">
+        <Icon icon="mdi:check-circle" class="flex-shrink-0" />
+        Sua conta foi excluída.
       </div>
 
       <div class="bg-white rounded-2xl shadow-card border p-6 grid gap-4">
