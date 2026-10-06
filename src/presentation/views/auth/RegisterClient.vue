@@ -70,6 +70,10 @@ async function submit() {
           <Icon v-if="auth.loading" icon="mdi:loading" class="animate-spin" />
           Criar conta
         </button>
+        <p class="text-xs text-center text-slate-500">
+          Ao criar a conta você concorda com a
+          <RouterLink to="/privacidade" class="text-brand font-medium hover:underline">Política de Privacidade</RouterLink>.
+        </p>
       </form>
 
       <div class="text-center text-sm text-slate-500">
