@@ -4,17 +4,25 @@ import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@app/stores/auth'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
+import IconInput from '@ui/components/IconInput.vue'
+import { useValidation, required, email } from '@shared/validation'
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
 const form = reactive({ email: '', password: '' })
+const { errors, check, validate } = useValidation(form, {
+  email: [required('Informe seu e-mail.'), email],
+  password: [required('Informe sua senha.')],
+})
+auth.error = null
 
 const sessionExpired = computed(() => route.query.expired === '1')
 
 async function submit() {
-  if (await auth.login(form)) {
+  if (!(await validate())) return
+  if (await auth.login({ ...form, email: form.email.trim() })) {
     router.replace(auth.home)
   }
 }
@@ -36,28 +44,9 @@ async function submit() {
       <div class="bg-white rounded-2xl shadow-card border p-6 grid gap-4">
         <h2 class="text-lg font-bold text-slate-900">{{ t('auth.login') }}</h2>
 
-        <form @submit.prevent="submit" class="grid gap-3">
-          <div class="relative">
-            <Icon icon="mdi:email-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" />
-            <input
-              v-model="form.email"
-              type="email"
-              :placeholder="t('auth.email')"
-              class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all"
-              required
-            />
-          </div>
-
-          <div class="relative">
-            <Icon icon="mdi:lock-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" />
-            <input
-              v-model="form.password"
-              type="password"
-              :placeholder="t('auth.password')"
-              class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 transition-all"
-              required
-            />
-          </div>
+        <form @submit.prevent="submit" novalidate class="grid gap-3">
+          <IconInput v-model="form.email" icon="mdi:email-outline" type="email" :placeholder="t('auth.email')" autocomplete="email" :error="errors.email" @blur="check('email')" />
+          <IconInput v-model="form.password" icon="mdi:lock-outline" type="password" :placeholder="t('auth.password')" autocomplete="current-password" :error="errors.password" @blur="check('password')" />
 
           <button
             :disabled="auth.loading"
