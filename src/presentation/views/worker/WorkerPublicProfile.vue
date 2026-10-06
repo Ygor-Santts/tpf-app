@@ -5,6 +5,7 @@ import { getWorkerPortfolio, getWorkerRatings, getWorkerRatingSummary, submitRat
 import { api } from '@infra/http'
 import { Icon } from '@iconify/vue'
 import StarRating from '@ui/components/StarRating.vue'
+import FeaturedBadge from '@ui/components/FeaturedBadge.vue'
 import type { PortfolioItem, Rating, RatingSummary } from '@domain/worker'
 
 const props = defineProps<{ id: string }>()
@@ -89,7 +90,10 @@ async function sendRating() {
           {{ worker.user?.name?.charAt(0)?.toUpperCase() }}
         </div>
         <div class="flex-1 min-w-0">
-          <h2 class="text-xl font-bold text-slate-900">{{ worker.user?.name }}</h2>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h2 class="text-xl font-bold text-slate-900">{{ worker.user?.name }}</h2>
+            <FeaturedBadge v-if="worker.featuredUntil" />
+          </div>
           <div v-if="summary && summary.count > 0" class="flex items-center gap-2 mt-1">
             <StarRating :score="Math.round(summary.average)" size="w-4 h-4" />
             <span class="text-sm text-slate-600">{{ summary.average.toFixed(1) }} · {{ summary.count }} avaliações</span>

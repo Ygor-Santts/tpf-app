@@ -45,7 +45,8 @@
     "step2Title": "Contate",
     "step2Desc": "Entre em contato diretamente pelo telefone do profissional.",
     "step3Title": "Contrate",
-    "step3Desc": "Combine os detalhes e feche o serviço com quem você escolheu."
+    "step3Desc": "Combine os detalhes e feche o serviço com quem você escolheu.",
+    "bestCta": "Melhores da região"
   },
   "auth": {
     "login": "Entrar",
@@ -109,7 +110,14 @@
     "allBrazil": "Mostrando profissionais de todo o Brasil.",
     "useMyLocation": "Usar minha localização",
     "noneNearby": "Ainda não temos profissionais na sua região.",
-    "noneNearbyDesc": "Aumente a distância ou veja profissionais de todo o Brasil."
+    "noneNearbyDesc": "Aumente a distância ou veja profissionais de todo o Brasil.",
+    "featured": "Destaque",
+    "sortAll": "Todos",
+    "sortBest": "Melhores avaliados",
+    "bestTitle": "Melhores no ramo",
+    "bestHint": "Só entram profissionais com 3 ou mais avaliações.",
+    "noBest": "Ainda não há profissionais bem avaliados aqui.",
+    "noBestDesc": "Para entrar na lista, o profissional precisa de pelo menos 3 avaliações."
   },
   "worker": {
     "tabs": {

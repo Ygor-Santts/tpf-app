@@ -45,7 +45,8 @@
     "step2Title": "Contact",
     "step2Desc": "Reach out directly via the professional's phone number.",
     "step3Title": "Hire",
-    "step3Desc": "Agree on the details and close the deal with your chosen professional."
+    "step3Desc": "Agree on the details and close the deal with your chosen professional.",
+    "bestCta": "Best in your area"
   },
   "auth": {
     "login": "Login",
@@ -109,7 +110,14 @@
     "allBrazil": "Showing professionals from all of Brazil.",
     "useMyLocation": "Use my location",
     "noneNearby": "No professionals in your region yet.",
-    "noneNearbyDesc": "Increase the distance or see professionals from all of Brazil."
+    "noneNearbyDesc": "Increase the distance or see professionals from all of Brazil.",
+    "featured": "Featured",
+    "sortAll": "All",
+    "sortBest": "Best rated",
+    "bestTitle": "Best in the field",
+    "bestHint": "Only professionals with 3 or more reviews.",
+    "noBest": "No well-rated professionals here yet.",
+    "noBestDesc": "Professionals need at least 3 reviews to be listed."
   },
   "worker": {
     "tabs": {

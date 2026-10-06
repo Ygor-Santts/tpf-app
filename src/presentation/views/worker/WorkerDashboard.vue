@@ -36,6 +36,11 @@ const recentRatings = computed(() => worker.ratings.slice(0, 3))
       </div>
     </div>
 
+    <div v-if="worker.profile?.featuredUntil" class="flex items-center gap-2 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm">
+      <Icon icon="mdi:star-shooting" class="text-lg flex-shrink-0" />
+      Seu perfil está em destaque até {{ new Date(worker.profile.featuredUntil).toLocaleDateString('pt-BR') }}.
+    </div>
+
     <!-- Stats -->
     <div class="grid grid-cols-2 gap-3">
       <div class="bg-white rounded-2xl border shadow-card p-4 text-center">

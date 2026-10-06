@@ -51,6 +51,13 @@ const steps = [
           {{ t('home.heroCta') }}
         </RouterLink>
         <RouterLink
+          to="/tabs/workers?sort=best"
+          class="flex items-center justify-center gap-2 py-3 rounded-xl bg-white/15 text-white font-medium text-sm hover:bg-white/25 transition-colors"
+        >
+          <Icon icon="mdi:trophy-outline" class="text-lg" />
+          {{ t('home.bestCta') }}
+        </RouterLink>
+        <RouterLink
           to="/register-worker"
           class="flex items-center justify-center gap-2 py-3 rounded-xl border border-white/40 text-white font-medium text-sm hover:bg-white/10 transition-colors"
         >
