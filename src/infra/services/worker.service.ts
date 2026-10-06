@@ -2,7 +2,7 @@ import { api } from '@infra/http'
 import type { Pagination } from '@shared/types'
 import type { WorkerSummary } from '@domain/marketplace'
 
-export type WorkerSearchParams = { name?: string; operationCitiesIds?: number[]; jobOccupationIds?: number[]; jobCategoryIds?: number[]; page?: number; limit?: number; minRating?: number }
+export type WorkerSearchParams = { name?: string; operationCitiesIds?: number[]; jobOccupationIds?: number[]; jobCategoryIds?: number[]; page?: number; limit?: number; minRating?: number; latitude?: number; longitude?: number; radiusKm?: number }
 function toQuery(params: WorkerSearchParams): string {
   const q = new URLSearchParams()
   if (params.name) q.set('name', params.name)
@@ -12,6 +12,11 @@ function toQuery(params: WorkerSearchParams): string {
   if (params.jobOccupationIds?.length) q.set('jobOccupationIds', params.jobOccupationIds.join(','))
   if (params.jobCategoryIds?.length) q.set('jobCategoriyIds', params.jobCategoryIds.join(',')) // backend typo compat
   if (params.minRating) q.set('minRating', String(params.minRating))
+  if (params.latitude !== undefined && params.longitude !== undefined) {
+    q.set('latitude', String(params.latitude))
+    q.set('longitude', String(params.longitude))
+    if (params.radiusKm) q.set('radiusKm', String(params.radiusKm))
+  }
   return q.toString()
 }
 export async function searchWorkers(params: WorkerSearchParams): Promise<Pagination<WorkerSummary>> {

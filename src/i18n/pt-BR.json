@@ -86,7 +86,7 @@
     "registerClientSuccess": "Conta criada! Faça login para continuar."
   },
   "marketplace": { "categories": "Categorias", "occupations": "Ocupações", "category": "Categoria", "backToCategories": "Voltar às categorias" },
-  "locales": { "states": "Estados", "cities": "Cidades", "backToStates": "Voltar aos estados" },
+  "locales": { "states": "Estados", "cities": "Cidades", "backToStates": "Voltar aos estados", "searchCity": "Buscar cidade...", "noCityFound": "Nenhuma cidade encontrada.", "typeToFindMore": "Digite o nome para encontrar outras cidades." },
   "workers": {
     "findProfessionals": "Buscar Profissionais",
     "nameOptional": "Nome (opcional)",
@@ -101,7 +101,17 @@
     "anyRating": "Qualquer avaliação",
     "viewProfile": "Ver perfil",
     "ratings": "avaliações",
-    "noRatings": "Sem avaliações"
+    "noRatings": "Sem avaliações",
+    "locating": "Buscando sua localização...",
+    "nearYou": "Perto de você",
+    "upToKm": "{km} km",
+    "seeAll": "Ver todos",
+    "locationOff": "Ative a localização para ver profissionais perto de você.",
+    "tryAgain": "Tentar de novo",
+    "allBrazil": "Mostrando profissionais de todo o Brasil.",
+    "useMyLocation": "Usar minha localização",
+    "noneNearby": "Ainda não temos profissionais na sua região.",
+    "noneNearbyDesc": "Aumente a distância ou veja profissionais de todo o Brasil."
   },
   "worker": {
     "tabs": {
