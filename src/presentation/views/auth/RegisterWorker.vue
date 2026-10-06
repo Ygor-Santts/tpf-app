@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CityPicker from '@ui/components/CityPicker.vue'
 import { reactive, ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@app/stores/auth'
@@ -177,18 +178,7 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
           </div>
           <div v-if="form.stateCode" class="grid gap-2">
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('auth.cities') }}</label>
-            <div class="flex flex-wrap gap-2">
-              <button
-                v-for="c in tax.citiesByState[form.stateCode] || []"
-                :key="c.id"
-                type="button"
-                @click="toggle(form.operationCitiesIds, c.id)"
-                class="px-3 py-1.5 rounded-full border text-sm font-medium cursor-pointer transition-colors"
-                :class="form.operationCitiesIds.includes(c.id) ? 'bg-brand text-white border-brand' : 'text-slate-600 hover:border-brand hover:text-brand'"
-              >
-                {{ c.name }}
-              </button>
-            </div>
+            <CityPicker v-model="form.operationCitiesIds" :cities="tax.citiesByState[form.stateCode] || []" />
             <p v-if="!step3Valid" class="text-xs text-red-500">{{ t('auth.selectAtLeastOne') }}</p>
           </div>
           <p v-if="auth.error" class="text-red-500 text-sm">{{ auth.error }}</p>

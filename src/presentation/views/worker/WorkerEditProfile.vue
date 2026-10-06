@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CityPicker from '@ui/components/CityPicker.vue'
 import { ref, onMounted, computed } from 'vue'
 import { useWorkerStore } from '@app/stores/worker'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
@@ -141,17 +142,7 @@ const currentCities = computed(() => worker.profile?.operationCities ?? [])
           <option v-for="s in tax.states" :key="s.code" :value="s.code">{{ s.name }}</option>
         </select>
 
-        <div v-if="selectedState" class="flex flex-wrap gap-1.5">
-          <span v-if="!(tax.citiesByState[selectedState]?.length)" class="text-sm text-slate-400">Nenhuma cidade encontrada para este estado.</span>
-          <button
-            v-for="c in tax.citiesByState[selectedState] || []"
-            :key="c.id"
-            type="button"
-            @click="toggle(selectedCityIds, c.id)"
-            class="px-2.5 py-1 rounded-full border text-xs font-medium transition-colors"
-            :class="selectedCityIds.includes(c.id) ? 'bg-brand text-white border-brand' : 'text-slate-600 hover:border-brand hover:text-brand'"
-          >{{ c.name }}</button>
-        </div>
+        <CityPicker v-if="selectedState" v-model="selectedCityIds" :cities="tax.citiesByState[selectedState] || []" />
       </div>
 
       <div v-if="worker.error" class="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">

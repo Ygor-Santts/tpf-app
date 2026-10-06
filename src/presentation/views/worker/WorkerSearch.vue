@@ -2,6 +2,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
 import { searchWorkers, type WorkerSearchParams } from '@infra/services/worker.service'
+import { getCurrentPosition, type Coords } from '@infra/services/location.service'
+import CityPicker from '@ui/components/CityPicker.vue'
 import WorkerCard from '@ui/components/WorkerCard.vue'
 import SkeletonCard from '@ui/components/SkeletonCard.vue'
 import EmptyState from '@ui/components/EmptyState.vue'
@@ -25,10 +27,35 @@ const error = ref<string | null>(null)
 const results = ref<{ data: any[]; page: number; limit: number; total: number } | null>(null)
 const filtersOpen = ref(false)
 
+// The search starts filtered by the user's region. Picking cities by hand wins
+// over the location, and "see all" turns it off.
+const RADII = [10, 30, 50]
+const coords = ref<Coords | null>(null)
+const location = ref<'locating' | 'on' | 'unavailable' | 'off'>('locating')
+const radiusKm = ref(30)
+const usingLocation = computed(() => location.value === 'on' && !selectedCityIds.value.length)
+
 onMounted(async () => {
-  await tax.loadCategories()
-  await tax.loadStates()
+  await Promise.all([tax.loadCategories(), tax.loadStates()])
+  await useMyLocation()
 })
+
+async function useMyLocation() {
+  location.value = 'locating'
+  coords.value = await getCurrentPosition()
+  location.value = coords.value ? 'on' : 'unavailable'
+  await run(1)
+}
+
+function showAll() {
+  location.value = 'off'
+  run(1)
+}
+
+function setRadius(km: number) {
+  radiusKm.value = km
+  run(1)
+}
 
 function toggle(list: number[], id: number) {
   const i = list.indexOf(id)
@@ -61,10 +88,13 @@ async function run(pageNum = 1) {
       jobOccupationIds: selectedOccupationIds.value.length ? selectedOccupationIds.value : undefined,
       operationCitiesIds: selectedCityIds.value.length ? selectedCityIds.value : undefined,
       minRating: minRating.value ?? undefined,
+      ...(usingLocation.value && coords.value ? { ...coords.value, radiusKm: radiusKm.value } : {}),
     }
     results.value = await searchWorkers(params)
   } catch (e: any) {
-    error.value = e?.response?.data?.message || 'Erro na busca.'
+    // The API answers 404 when nobody matches: show the empty state, not an error.
+    if (e?.response?.status === 404) results.value = { data: [], page: page.value, limit: limit.value, total: 0 }
+    else error.value = e?.response?.data?.message || 'Erro na busca.'
   } finally {
     loading.value = false
   }
@@ -171,16 +201,7 @@ function workerCities(w: any): string[] {
 
           <div v-if="selectedState" class="grid gap-2">
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('auth.cities') }}</label>
-            <div class="flex flex-wrap gap-1.5">
-              <button
-                v-for="c in tax.citiesByState[selectedState] || []"
-                :key="c.id"
-                type="button"
-                @click="toggle(selectedCityIds, c.id)"
-                class="px-2.5 py-1 rounded-full border text-xs font-medium cursor-pointer transition-colors"
-                :class="selectedCityIds.includes(c.id) ? 'bg-brand text-white border-brand' : 'text-slate-600 hover:border-brand hover:text-brand'"
-              >{{ c.name }}</button>
-            </div>
+            <CityPicker v-model="selectedCityIds" :cities="tax.citiesByState[selectedState] || []" />
           </div>
 
           <div class="grid gap-1.5">
@@ -220,6 +241,34 @@ function workerCities(w: any): string[] {
           {{ t('common.search') }}
         </button>
 
+        <!-- Region -->
+        <div class="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+          <template v-if="location === 'locating'">
+            <Icon icon="mdi:loading" class="animate-spin text-brand" />{{ t('workers.locating') }}
+          </template>
+          <template v-else-if="usingLocation">
+            <Icon icon="mdi:map-marker" class="text-brand" />
+            <span class="font-medium text-slate-800">{{ t('workers.nearYou') }}</span>
+            <button
+              v-for="km in RADII"
+              :key="km"
+              type="button"
+              @click="setRadius(km)"
+              class="px-2.5 py-1 rounded-full border text-xs font-medium transition-colors"
+              :class="radiusKm === km ? 'bg-brand text-white border-brand' : 'text-slate-600 hover:border-brand hover:text-brand'"
+            >{{ t('workers.upToKm', { km }) }}</button>
+            <button type="button" @click="showAll" class="text-xs text-brand hover:underline">{{ t('workers.seeAll') }}</button>
+          </template>
+          <template v-else-if="location === 'unavailable' && !selectedCityIds.length">
+            <Icon icon="mdi:map-marker-off-outline" class="text-slate-400" />{{ t('workers.locationOff') }}
+            <button type="button" @click="useMyLocation" class="text-xs text-brand hover:underline">{{ t('workers.tryAgain') }}</button>
+          </template>
+          <template v-else-if="location === 'off' && !selectedCityIds.length">
+            <Icon icon="mdi:earth" class="text-slate-400" />{{ t('workers.allBrazil') }}
+            <button type="button" @click="useMyLocation" class="text-xs text-brand hover:underline">{{ t('workers.useMyLocation') }}</button>
+          </template>
+        </div>
+
         <div v-if="error" class="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
           <Icon icon="mdi:alert-circle-outline" class="flex-shrink-0" />{{ error }}
         </div>
@@ -230,6 +279,16 @@ function workerCities(w: any): string[] {
         </template>
 
         <!-- Empty state -->
+        <EmptyState
+          v-else-if="searched && results && results.data.length === 0 && usingLocation"
+          icon="mdi:map-marker-radius-outline"
+          :title="t('workers.noneNearby')"
+          :description="t('workers.noneNearbyDesc')"
+        >
+          <button @click="showAll" class="px-4 py-2 rounded-xl border text-sm text-brand border-brand hover:bg-brand-50 transition-colors">
+            {{ t('workers.seeAll') }}
+          </button>
+        </EmptyState>
         <EmptyState
           v-else-if="searched && results && results.data.length === 0"
           icon="mdi:account-search-outline"
@@ -327,16 +386,7 @@ function workerCities(w: any): string[] {
 
             <div v-if="selectedState" class="grid gap-2">
               <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('auth.cities') }}</label>
-              <div class="flex flex-wrap gap-2">
-                <button
-                  v-for="c in tax.citiesByState[selectedState] || []"
-                  :key="c.id"
-                  type="button"
-                  @click="toggle(selectedCityIds, c.id)"
-                  class="px-3 py-1.5 rounded-full border text-sm font-medium cursor-pointer transition-colors"
-                  :class="selectedCityIds.includes(c.id) ? 'bg-brand text-white border-brand' : 'text-slate-600 hover:border-brand hover:text-brand'"
-                >{{ c.name }}</button>
-              </div>
+              <CityPicker v-model="selectedCityIds" :cities="tax.citiesByState[selectedState] || []" />
             </div>
 
             <div class="grid gap-1.5">

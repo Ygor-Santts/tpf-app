@@ -86,7 +86,7 @@
     "registerClientSuccess": "Account created! Please log in to continue."
   },
   "marketplace": { "categories": "Categories", "occupations": "Occupations", "category": "Category", "backToCategories": "Back to categories" },
-  "locales": { "states": "States", "cities": "Cities", "backToStates": "Back to states" },
+  "locales": { "states": "States", "cities": "Cities", "backToStates": "Back to states", "searchCity": "Search city...", "noCityFound": "No city found.", "typeToFindMore": "Type a name to find other cities." },
   "workers": {
     "findProfessionals": "Find Professionals",
     "nameOptional": "Name (optional)",
@@ -101,7 +101,17 @@
     "anyRating": "Any rating",
     "viewProfile": "View profile",
     "ratings": "ratings",
-    "noRatings": "No ratings"
+    "noRatings": "No ratings",
+    "locating": "Finding your location...",
+    "nearYou": "Near you",
+    "upToKm": "{km} km",
+    "seeAll": "See all",
+    "locationOff": "Turn on location to see professionals near you.",
+    "tryAgain": "Try again",
+    "allBrazil": "Showing professionals from all of Brazil.",
+    "useMyLocation": "Use my location",
+    "noneNearby": "No professionals in your region yet.",
+    "noneNearbyDesc": "Increase the distance or see professionals from all of Brazil."
   },
   "worker": {
     "tabs": {
