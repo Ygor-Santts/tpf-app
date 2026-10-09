@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppLogo from '@ui/components/AppLogo.vue'
 import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@app/stores/auth'
@@ -40,7 +41,7 @@ async function submit() {
   <div class="min-h-screen bg-gradient-to-br from-brand-50 to-slate-100 flex items-center justify-center p-4">
     <div class="w-full max-w-sm bg-white rounded-3xl shadow-xl p-8 grid gap-6">
       <div class="text-center">
-        <div class="text-2xl font-bold text-brand mb-1">Trampo Fácil</div>
+        <RouterLink to="/" class="block mb-3"><AppLogo variant="full" /></RouterLink>
         <h1 class="text-xl font-bold text-slate-900">Criar conta de cliente</h1>
         <p class="text-sm text-slate-500 mt-1">Encontre profissionais qualificados</p>
       </div>

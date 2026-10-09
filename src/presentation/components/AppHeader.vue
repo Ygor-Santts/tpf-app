@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppLogo from '@ui/components/AppLogo.vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -30,7 +31,7 @@ function switchMode() {
 <template>
   <header class="fixed top-0 inset-x-0 z-30 h-14 bg-white border-b flex items-center justify-between px-4">
     <RouterLink :to="auth.home" class="flex items-center gap-2">
-      <span class="text-lg font-bold text-brand">Trampo Fácil</span>
+      <AppLogo class="text-lg" />
     </RouterLink>
 
     <div class="flex items-center gap-2">
