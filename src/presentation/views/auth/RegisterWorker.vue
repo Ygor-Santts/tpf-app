@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppLogo from '@ui/components/AppLogo.vue'
 import CityPicker from '@ui/components/CityPicker.vue'
 import AddOccupation from '@ui/components/AddOccupation.vue'
 import type { AddedOccupation } from '@infra/services/job.service'
@@ -133,7 +134,7 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
   <div class="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
     <div class="w-full max-w-sm">
       <div class="text-center mb-6">
-        <RouterLink to="/" class="text-2xl font-bold text-brand">Trampo Fácil</RouterLink>
+        <RouterLink to="/" class="block mb-3"><AppLogo variant="full" /></RouterLink>
       </div>
 
       <div class="bg-white rounded-2xl shadow-card border p-6 grid gap-5">
