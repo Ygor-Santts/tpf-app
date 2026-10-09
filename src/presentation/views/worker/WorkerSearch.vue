@@ -46,8 +46,34 @@ const usingLocation = computed(() => location.value === 'on' && !selectedCityIds
 
 onMounted(async () => {
   await Promise.all([tax.loadCategories(), tax.loadStates()])
+  await applyCategoryFromLink()
   await useMyLocation()
 })
+
+// The Categories tab links here with ?category= and, for one profession, ?occupation=.
+async function applyCategoryFromLink() {
+  const categoryId = Number(route.query.category)
+  if (!categoryId) return
+  selectedCategory.value = categoryId
+  await tax.loadOccupations(categoryId)
+  const occupationId = Number(route.query.occupation)
+  if (occupationId) selectedOccupationIds.value = [occupationId]
+}
+
+// Shown above the results, since on a phone the filters sit in a closed drawer.
+const activeTaxonomyLabel = computed(() => {
+  if (!selectedCategory.value) return ''
+  const occupations = tax.occupationsByCategory[selectedCategory.value] ?? []
+  const names = occupations.filter((o) => selectedOccupationIds.value.includes(o.id)).map((o) => o.name)
+  if (names.length) return names.join(', ')
+  return tax.categories.find((c) => c.id === selectedCategory.value)?.name ?? ''
+})
+
+function clearTaxonomy() {
+  selectedCategory.value = null
+  selectedOccupationIds.value = []
+  run(1)
+}
 
 async function useMyLocation() {
   location.value = 'locating'
@@ -265,6 +291,18 @@ function workerCities(w: any): string[] {
           <Icon v-if="loading" icon="mdi:loading" class="animate-spin" />
           {{ t('common.search') }}
         </button>
+
+        <div v-if="activeTaxonomyLabel" class="flex">
+          <button
+            type="button"
+            @click="clearTaxonomy"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-sm font-medium text-brand hover:bg-brand-100 transition-colors"
+          >
+            <Icon icon="mdi:tools" />
+            {{ activeTaxonomyLabel }}
+            <Icon icon="mdi:close" class="text-base" />
+          </button>
+        </div>
 
         <!-- Region -->
         <div class="flex flex-wrap items-center gap-2 text-sm text-slate-600">
