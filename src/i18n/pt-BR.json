@@ -194,5 +194,22 @@
     "toClient": "Mudar para modo cliente",
     "toWorker": "Mudar para modo trabalhador",
     "becomeWorker": "Quero trabalhar também"
+  },
+  "visitor": {
+    "previewBanner": "Você está vendo uma prévia. Crie sua conta grátis para falar com os profissionais.",
+    "signUp": "Criar conta",
+    "signIn": "Entrar",
+    "haveAccount": "Já tenho conta",
+    "seeContact": "Ver contato",
+    "promptTitle": "Crie sua conta para falar com {name}",
+    "promptTitleGeneric": "Crie sua conta para falar com os profissionais",
+    "promptText": "É grátis e leva menos de um minuto. Depois é só chamar no WhatsApp.",
+    "asClient": "Quero contratar",
+    "asClientDesc": "Encontre e chame profissionais perto de você.",
+    "asWorker": "Sou profissional",
+    "asWorkerDesc": "Divulgue seu trabalho e receba clientes.",
+    "joinTitle": "Faça parte do Trampo Fácil",
+    "profileContact": "Entre ou crie sua conta grátis para chamar este profissional no WhatsApp.",
+    "bestHome": "Melhores no ramo"
   }
 }

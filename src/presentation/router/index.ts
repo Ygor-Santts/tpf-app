@@ -36,11 +36,12 @@ const routes: RouteRecordRaw[] = [
     component: AppLayout,
     children: [
       { path: 'home', component: Home, meta: { public: true } },
-      { path: 'categories', component: Categories },
-      { path: 'categories/:categoryId/occupations', component: Occupations, props: true },
-      { path: 'states', component: States },
-      { path: 'states/:code/cities', component: Cities, props: true },
-      { path: 'workers', component: WorkerSearch },
+      // Browsing is open to visitors as a preview; contacting needs an account.
+      { path: 'categories', component: Categories, meta: { public: true } },
+      { path: 'categories/:categoryId/occupations', component: Occupations, props: true, meta: { public: true } },
+      { path: 'states', component: States, meta: { public: true } },
+      { path: 'states/:code/cities', component: Cities, props: true, meta: { public: true } },
+      { path: 'workers', component: WorkerSearch, meta: { public: true } },
       { path: 'workers/:id', component: WorkerPublicProfile, props: true, meta: { public: true } },
     ],
   },

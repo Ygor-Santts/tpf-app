@@ -9,9 +9,13 @@ import StarRating from '@ui/components/StarRating.vue'
 import FeaturedBadge from '@ui/components/FeaturedBadge.vue'
 import type { PortfolioItem, Rating, RatingSummary } from '@domain/worker'
 import { formatPhone, whatsappUrl } from '@shared/validation'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{ id: string }>()
 const auth = useAuthStore()
+const route = useRoute()
+const { t } = useI18n()
 
 const worker = ref<any>(null)
 const portfolio = ref<PortfolioItem[]>([])
@@ -106,8 +110,26 @@ async function sendRating() {
         </div>
       </div>
 
-      <!-- Contact -->
-      <div v-if="worker.user?.phone" class="grid gap-2">
+      <!-- Contact: visitors are asked to sign in or create an account -->
+      <div v-if="!auth.token" class="bg-white rounded-2xl border shadow-card p-4 grid gap-3">
+        <p class="text-sm text-slate-600">{{ t('visitor.profileContact') }}</p>
+        <div class="grid sm:grid-cols-2 gap-2">
+          <RouterLink
+            to="/register-client"
+            class="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors"
+          >
+            <Icon icon="mdi:whatsapp" class="text-lg" />
+            {{ t('visitor.signUp') }}
+          </RouterLink>
+          <RouterLink
+            :to="{ path: '/login', query: { redirect: route.fullPath } }"
+            class="flex items-center justify-center gap-2 py-3 rounded-xl border text-slate-700 font-semibold hover:border-brand hover:text-brand transition-colors"
+          >
+            {{ t('visitor.haveAccount') }}
+          </RouterLink>
+        </div>
+      </div>
+      <div v-else-if="worker.user?.phone" class="grid gap-2">
         <a
           v-if="whatsappUrl(worker.user.phone, worker.user.name)"
           :href="whatsappUrl(worker.user.phone, worker.user.name)"
@@ -186,7 +208,7 @@ async function sendRating() {
       </div>
 
       <div v-else-if="!auth.token" class="p-4 bg-slate-50 rounded-2xl text-sm text-slate-600 text-center">
-        <RouterLink to="/login" class="text-brand font-medium hover:underline">Faça login</RouterLink>
+        <RouterLink :to="{ path: '/login', query: { redirect: route.fullPath } }" class="text-brand font-medium hover:underline">Faça login</RouterLink>
         para avaliar este profissional.
       </div>
     </template>

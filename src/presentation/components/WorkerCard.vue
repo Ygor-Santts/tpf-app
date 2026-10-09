@@ -3,8 +3,13 @@ import { Icon } from '@iconify/vue'
 import { useI18n } from 'vue-i18n'
 import StarRating from '@ui/components/StarRating.vue'
 import FeaturedBadge from '@ui/components/FeaturedBadge.vue'
+import SignUpPrompt from '@ui/components/SignUpPrompt.vue'
 import { formatPhone, whatsappUrl } from '@shared/validation'
+import { useAuthStore } from '@app/stores/auth'
+import { ref } from 'vue'
 const { t } = useI18n()
+const auth = useAuthStore()
+const promptOpen = ref(false)
 
 defineProps<{
   id?: number
@@ -37,7 +42,7 @@ defineProps<{
             <StarRating :score="Math.round(averageRating ?? 0)" size="w-3 h-3" />
             <span class="text-xs text-slate-500">{{ averageRating?.toFixed(1) }} ({{ ratingCount }})</span>
           </div>
-          <div v-if="phone" class="flex items-center gap-1 text-xs text-slate-500">
+          <div v-if="phone && auth.token" class="flex items-center gap-1 text-xs text-slate-500">
             <Icon icon="mdi:phone-outline" class="text-sm" />
             {{ formatPhone(phone) }}
           </div>
@@ -69,8 +74,17 @@ defineProps<{
         <Icon icon="mdi:account-outline" class="text-base" />
         {{ t('workers.viewProfile') }}
       </RouterLink>
+      <button
+        v-if="!auth.token"
+        type="button"
+        @click="promptOpen = true"
+        class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition-colors"
+      >
+        <Icon icon="mdi:whatsapp" class="text-base" />
+        {{ t('visitor.seeContact') }}
+      </button>
       <a
-        v-if="phone && whatsappUrl(phone, name)"
+        v-else-if="phone && whatsappUrl(phone, name)"
         :href="whatsappUrl(phone, name)"
         target="_blank"
         rel="noopener"
@@ -88,5 +102,6 @@ defineProps<{
         {{ t('workers.call') }}
       </a>
     </div>
+    <SignUpPrompt v-model="promptOpen" :name="name" />
   </div>
 </template>

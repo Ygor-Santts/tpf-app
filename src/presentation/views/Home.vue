@@ -3,15 +3,32 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
+import { useAuthStore } from '@app/stores/auth'
+import { searchWorkers } from '@infra/services/worker.service'
+import WorkerCard from '@ui/components/WorkerCard.vue'
+import JoinChoices from '@ui/components/JoinChoices.vue'
 
 const { t } = useI18n()
 const tax = useTaxonomyStore()
+const auth = useAuthStore()
 const categoriesError = ref(false)
+const best = ref<any[]>([])
 
 onMounted(async () => {
+  loadBest()
   try { await tax.loadCategories() }
   catch { categoriesError.value = true }
 })
+
+// A taste of who is on the app. The section stays hidden when nobody qualifies.
+async function loadBest() {
+  try { best.value = (await searchWorkers({ sort: 'best', limit: 3 })).data }
+  catch { best.value = [] }
+}
+
+function workerOccupations(w: any): string[] {
+  return w.jobCategories?.flatMap((cat: any) => cat.occupations?.map((o: any) => o.name) ?? []) ?? []
+}
 
 
 const categoryIcons: Record<string, string> = {
@@ -95,6 +112,30 @@ const steps = [
       </div>
     </div>
 
+    <!-- Melhores no ramo -->
+    <div v-if="best.length" class="grid gap-3">
+      <div class="flex items-center justify-between">
+        <h2 class="font-bold text-slate-900 flex items-center gap-1.5">
+          <Icon icon="mdi:trophy-outline" class="text-amber-500" />
+          {{ t('visitor.bestHome') }}
+        </h2>
+        <RouterLink to="/tabs/workers?sort=best" class="text-xs text-brand font-medium hover:underline">{{ t('common.showAll') }}</RouterLink>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <WorkerCard
+          v-for="w in best"
+          :key="w.id"
+          :id="w.id"
+          :name="w.name"
+          :phone="w.phone"
+          :occupations="workerOccupations(w)"
+          :cities="w.operationCities?.map((c: any) => c.name)"
+          :average-rating="w.averageRating"
+          :rating-count="w.ratingCount"
+        />
+      </div>
+    </div>
+
     <!-- Como funciona -->
     <div class="grid gap-4">
       <h2 class="font-bold text-slate-900">{{ t('home.howItWorks') }}</h2>
@@ -114,6 +155,8 @@ const steps = [
         </div>
       </div>
     </div>
+
+    <JoinChoices v-if="!auth.token" />
 
   </section>
 </template>
