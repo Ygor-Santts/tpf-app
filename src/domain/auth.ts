@@ -3,6 +3,7 @@ export interface LoginDTO { email: string; password: string }
 export interface UserProfile {
   id: number; name: string; email: string; phone: string;
   isWorker: boolean; workerId?: number;
+  isAdmin?: boolean;
 }
 
 export interface LoginResponse {

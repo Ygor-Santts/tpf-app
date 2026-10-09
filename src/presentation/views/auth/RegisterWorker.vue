@@ -169,7 +169,7 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('auth.category') }}</label>
             <select v-model.number="form.jobCategoryId" @change="onCategoryChange" :aria-invalid="!!errors.jobCategoryId" class="border rounded-xl px-3 py-3 text-sm cursor-pointer focus:outline-none focus:border-brand">
               <option :value="0" disabled>{{ t('auth.select') }}</option>
-              <option v-for="c in tax.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+              <option v-for="c in tax.categories" :key="c.id" :value="c.id">{{ c.name }}{{ c.pending ? ' (em análise)' : '' }}</option>
               <option :value="NEW_CATEGORY">+ Minha categoria não está na lista</option>
             </select>
             <FieldError :message="errors.jobCategoryId" />
@@ -186,7 +186,7 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
                 class="px-3 py-1.5 rounded-full border text-sm font-medium cursor-pointer transition-colors"
                 :class="form.jobOccupationIds.includes(o.id) ? 'bg-brand text-white border-brand' : 'text-slate-600 hover:border-brand hover:text-brand'"
               >
-                {{ o.name }}
+                {{ o.name }}{{ o.pending ? ' (em análise)' : '' }}
               </button>
             </div>
             <FieldError :message="errors.jobOccupationIds" />

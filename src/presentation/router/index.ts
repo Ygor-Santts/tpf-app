@@ -20,6 +20,8 @@ const WorkerDashboard = () => import('@ui/views/worker/WorkerDashboard.vue')
 const WorkerEditProfile = () => import('@ui/views/worker/WorkerEditProfile.vue')
 const WorkerPortfolio = () => import('@ui/views/worker/WorkerPortfolio.vue')
 const WorkerRatings = () => import('@ui/views/worker/WorkerRatings.vue')
+const AdminCategories = () => import('@ui/views/admin/AdminCategories.vue')
+const AdminUsers = () => import('@ui/views/admin/AdminUsers.vue')
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/tabs/home' },
@@ -56,6 +58,16 @@ const routes: RouteRecordRaw[] = [
       { path: 'ratings', component: WorkerRatings, meta: { workerOnly: true } },
     ],
   },
+  {
+    path: '/admin',
+    component: AppLayout,
+    meta: { adminOnly: true },
+    children: [
+      { path: '', redirect: '/admin/categories' },
+      { path: 'categories', component: AdminCategories },
+      { path: 'users', component: AdminUsers },
+    ],
+  },
 ]
 
 const router = createRouter({ history: createWebHistory(), routes })
@@ -70,6 +82,8 @@ router.beforeEach((to, _from, next) => {
   if (token && auth.isWorker && to.path === '/login') return next(auth.home)
   if (to.path === '/become-worker' && auth.isWorker) return next('/worker/dashboard')
   if (isWorkerOnly && !auth.isWorker) return next('/tabs/home')
+  // The API checks it too; this only keeps everyone else off the screens.
+  if (to.meta.adminOnly && !auth.isAdmin) return next('/tabs/home')
   // A worker opening a worker page (e.g. a bookmarked link) switches to worker mode.
   if (isWorkerOnly && !auth.inWorkerMode) auth.setMode('worker')
 

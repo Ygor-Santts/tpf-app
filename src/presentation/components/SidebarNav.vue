@@ -69,6 +69,15 @@ function switchMode() {
       </RouterLink>
 
       <div v-if="auth.token" class="mt-2 pt-2 border-t">
+        <RouterLink
+          v-if="auth.isAdmin"
+          to="/admin"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors"
+          :class="isActive('/admin') ? 'bg-brand-50 text-brand' : 'text-slate-500 hover:bg-slate-50'"
+        >
+          <Icon icon="mdi:shield-crown-outline" class="text-xl flex-shrink-0" />
+          Admin
+        </RouterLink>
         <button
           v-if="auth.isWorker"
           @click="switchMode"
