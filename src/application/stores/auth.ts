@@ -28,7 +28,6 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     isWorker: (state) => Boolean(state.user?.isWorker),
-    isAdmin: (state) => Boolean(state.user?.isAdmin),
     inWorkerMode: (state) => Boolean(state.user?.isWorker) && state.mode === 'worker',
     home: (state) => homeFor(state.mode),
   },

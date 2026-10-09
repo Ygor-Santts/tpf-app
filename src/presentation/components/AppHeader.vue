@@ -93,16 +93,6 @@ function switchMode() {
             </RouterLink>
 
             <RouterLink
-              v-if="auth.isAdmin"
-              to="/admin"
-              @click="closeMenu"
-              class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
-            >
-              <Icon icon="mdi:shield-crown-outline" class="text-lg text-slate-400" />
-              Admin
-            </RouterLink>
-
-            <RouterLink
               to="/privacidade"
               @click="closeMenu"
               class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
