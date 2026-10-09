@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getJobCategories, getOccupationsByCategory } from '@infra/services/job.service'
+import { getJobCategories, getOccupationsByCategory, addOccupation, type AddOccupationDTO } from '@infra/services/job.service'
 import { getStates, getCitiesByState } from '@infra/services/locales.service'
 import type { JobCategory, JobOccupation, State, City } from '@domain/marketplace'
 
@@ -43,6 +43,19 @@ export const useTaxonomyStore = defineStore('taxonomy', {
       } finally {
         this.loading = false
       }
+    },
+    // Adds a category and/or occupation the worker did not find in the list.
+    // The API returns the existing one when the name is already there.
+    async addOccupation(dto: AddOccupationDTO) {
+      const added = await addOccupation(dto)
+      if (!this.categories.some((c) => c.id === added.categoryId)) {
+        this.categories.push({ id: added.categoryId, name: added.categoryName })
+      }
+      await this.loadOccupations(added.categoryId)
+      const list = this.occupationsByCategory[added.categoryId] ?? []
+      if (!list.some((o) => o.id === added.id)) list.push({ id: added.id, name: added.name, categoryId: added.categoryId })
+      this.occupationsByCategory[added.categoryId] = list
+      return added
     },
     async loadOccupations(categoryId: number) {
       if (this.occupationsByCategory[categoryId]) return
