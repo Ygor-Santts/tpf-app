@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppLogo from '@ui/components/AppLogo.vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
@@ -44,8 +45,8 @@ function switchMode() {
 <template>
   <aside class="fixed inset-y-0 left-0 w-60 bg-white border-r flex flex-col z-40">
     <div class="h-16 flex items-center px-6 border-b">
-      <RouterLink :to="auth.home" class="text-xl font-bold text-brand">
-        Trampo Fácil
+      <RouterLink :to="auth.home" class="text-xl">
+        <AppLogo />
       </RouterLink>
     </div>
 

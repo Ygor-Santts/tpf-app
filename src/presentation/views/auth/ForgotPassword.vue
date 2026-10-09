@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppLogo from '@ui/components/AppLogo.vue'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
@@ -33,7 +34,7 @@ async function submit() {
   <div class="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
     <div class="w-full max-w-sm">
       <div class="text-center mb-8">
-        <RouterLink to="/" class="text-2xl font-bold text-brand">Trampo Fácil</RouterLink>
+        <RouterLink to="/" class="block mb-3"><AppLogo variant="full" /></RouterLink>
       </div>
 
       <div class="bg-white rounded-2xl shadow-card border p-6 grid gap-4">
