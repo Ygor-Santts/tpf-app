@@ -1,0 +1,13 @@
+# Production web build of the app, served by Caddy together with the API.
+# Built by tpf-api/docker-compose.server.yml (context ../tpf-app).
+FROM node:20-bookworm-slim AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-fund --no-audit --loglevel=error
+COPY . .
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+RUN npm run build
+
+FROM caddy:2.8
+COPY --from=build /app/dist /srv
