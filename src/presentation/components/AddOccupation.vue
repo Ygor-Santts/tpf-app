@@ -80,6 +80,7 @@ async function add() {
       <input v-model="form.name" maxlength="60" placeholder="Ex.: Eletricista" :aria-invalid="!!errors.name" @blur="check('name')" @keydown.enter.prevent="add" class="w-full border rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-brand" />
       <FieldError :message="errors.name" />
     </div>
+    <p class="text-xs text-slate-500">Já vale para o seu perfil. Aparece para todos depois que a equipe do Trampo Fácil revisar.</p>
     <FieldError :message="error" />
     <div class="flex gap-2">
       <button type="button" @click="cancel" class="flex-1 py-2 rounded-xl border bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">Cancelar</button>

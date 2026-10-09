@@ -4,7 +4,7 @@ export interface WorkerProfile {
   /** Paid Destaque end date, only while it is active. */
   featuredUntil?: string | null
   user: { id: number; name: string; email: string; phone: string }
-  jobOccupations: { id: number; name: string; category: { id: number; name: string } }[]
+  jobOccupations: { id: number; name: string; pending?: boolean; category: { id: number; name: string } }[]
   operationCities: { id: number; name: string }[]
   averageRating?: number
   ratingCount?: number

@@ -127,7 +127,7 @@ const currentCities = computed(() => worker.profile?.operationCities ?? [])
         <h3 class="font-semibold text-slate-800 text-sm">Ocupações atuais</h3>
         <div class="flex flex-wrap gap-1.5">
           <span v-for="o in currentOccupations" :key="o.id" class="px-2.5 py-1 rounded-full bg-brand-50 text-brand text-xs font-medium border border-brand-100">
-            {{ o.name }}
+            {{ o.name }}{{ o.pending ? ' (em análise)' : '' }}
           </span>
           <span v-if="!currentOccupations.length" class="text-sm text-slate-400">Nenhuma ocupação cadastrada</span>
         </div>
@@ -135,7 +135,7 @@ const currentCities = computed(() => worker.profile?.operationCities ?? [])
 
         <select v-model="selectedCategory" @change="onCategoryChange" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand">
           <option :value="null">Selecionar categoria...</option>
-          <option v-for="c in tax.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+          <option v-for="c in tax.categories" :key="c.id" :value="c.id">{{ c.name }}{{ c.pending ? ' (em análise)' : '' }}</option>
           <option :value="NEW_CATEGORY">+ Minha categoria não está na lista</option>
         </select>
 
@@ -148,7 +148,7 @@ const currentCities = computed(() => worker.profile?.operationCities ?? [])
             @click="toggle(selectedOccupationIds, o.id)"
             class="px-2.5 py-1 rounded-full border text-xs font-medium transition-colors"
             :class="selectedOccupationIds.includes(o.id) ? 'bg-brand text-white border-brand' : 'text-slate-600 hover:border-brand hover:text-brand'"
-          >{{ o.name }}</button>
+          >{{ o.name }}{{ o.pending ? ' (em análise)' : '' }}</button>
         </div>
         <AddOccupation v-if="selectedCategory && selectedCategory !== NEW_CATEGORY" :category-id="selectedCategory" @added="onOccupationAdded" />
       </div>

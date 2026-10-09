@@ -48,12 +48,14 @@ export const useTaxonomyStore = defineStore('taxonomy', {
     // The API returns the existing one when the name is already there.
     async addOccupation(dto: AddOccupationDTO) {
       const added = await addOccupation(dto)
+      // New ones wait for review, so the public lists don't have them yet.
       if (!this.categories.some((c) => c.id === added.categoryId)) {
-        this.categories.push({ id: added.categoryId, name: added.categoryName })
+        this.categories.push({ id: added.categoryId, name: added.categoryName, pending: added.pending })
+        this.occupationsByCategory[added.categoryId] ??= []
       }
       await this.loadOccupations(added.categoryId)
       const list = this.occupationsByCategory[added.categoryId] ?? []
-      if (!list.some((o) => o.id === added.id)) list.push({ id: added.id, name: added.name, categoryId: added.categoryId })
+      if (!list.some((o) => o.id === added.id)) list.push({ id: added.id, name: added.name, categoryId: added.categoryId, pending: added.pending })
       this.occupationsByCategory[added.categoryId] = list
       return added
     },
