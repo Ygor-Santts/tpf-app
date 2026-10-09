@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import CityPicker from '@ui/components/CityPicker.vue'
+import AddOccupation from '@ui/components/AddOccupation.vue'
+import type { AddedOccupation } from '@infra/services/job.service'
 import { reactive, ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@app/stores/auth'
@@ -68,9 +70,19 @@ function toggle(list: number[], id: number) {
   else list.push(id)
 }
 
+// NEW_CATEGORY in the select opens the form to add a category of their own.
+const NEW_CATEGORY = -1
+
 async function onCategoryChange() {
   form.jobOccupationIds = []
-  if (form.jobCategoryId) await tax.loadOccupations(form.jobCategoryId)
+  if (form.jobCategoryId > 0) await tax.loadOccupations(form.jobCategoryId)
+}
+
+function onOccupationAdded(o: AddedOccupation) {
+  if (form.jobCategoryId !== o.categoryId) form.jobOccupationIds = []
+  form.jobCategoryId = o.categoryId
+  if (!form.jobOccupationIds.includes(o.id)) form.jobOccupationIds.push(o.id)
+  check('jobOccupationIds')
 }
 
 async function onStateChange() {
@@ -157,10 +169,12 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
             <select v-model.number="form.jobCategoryId" @change="onCategoryChange" :aria-invalid="!!errors.jobCategoryId" class="border rounded-xl px-3 py-3 text-sm cursor-pointer focus:outline-none focus:border-brand">
               <option :value="0" disabled>{{ t('auth.select') }}</option>
               <option v-for="c in tax.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+              <option :value="NEW_CATEGORY">+ Minha categoria não está na lista</option>
             </select>
             <FieldError :message="errors.jobCategoryId" />
           </div>
-          <div v-if="form.jobCategoryId" class="grid gap-2">
+          <AddOccupation v-if="form.jobCategoryId === NEW_CATEGORY" open @added="onOccupationAdded" @cancel="form.jobCategoryId = 0" />
+          <div v-else-if="form.jobCategoryId" class="grid gap-2">
             <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ t('auth.occupations') }}</label>
             <div class="flex flex-wrap gap-2">
               <button
@@ -175,6 +189,7 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
               </button>
             </div>
             <FieldError :message="errors.jobOccupationIds" />
+            <AddOccupation :category-id="form.jobCategoryId" @added="onOccupationAdded" />
           </div>
           <div class="flex gap-2 mt-1">
             <button @click="prevStep" class="flex-1 py-3 rounded-xl border text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">{{ t('common.back') }}</button>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import CityPicker from '@ui/components/CityPicker.vue'
+import AddOccupation from '@ui/components/AddOccupation.vue'
+import type { AddedOccupation } from '@infra/services/job.service'
 import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useWorkerStore } from '@app/stores/worker'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
@@ -41,9 +43,18 @@ function toggle(list: number[], id: number) {
   else list.push(id)
 }
 
+// NEW_CATEGORY in the select opens the form to add a category of their own.
+const NEW_CATEGORY = -1
+
 async function onCategoryChange() {
   selectedOccupationIds.value = []
-  if (selectedCategory.value) await tax.loadOccupations(selectedCategory.value)
+  if (selectedCategory.value && selectedCategory.value > 0) await tax.loadOccupations(selectedCategory.value)
+}
+
+function onOccupationAdded(o: AddedOccupation) {
+  if (selectedCategory.value !== o.categoryId) selectedOccupationIds.value = []
+  selectedCategory.value = o.categoryId
+  if (!selectedOccupationIds.value.includes(o.id)) selectedOccupationIds.value.push(o.id)
 }
 
 async function onStateChange() {
@@ -125,9 +136,11 @@ const currentCities = computed(() => worker.profile?.operationCities ?? [])
         <select v-model="selectedCategory" @change="onCategoryChange" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand">
           <option :value="null">Selecionar categoria...</option>
           <option v-for="c in tax.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+          <option :value="NEW_CATEGORY">+ Minha categoria não está na lista</option>
         </select>
 
-        <div v-if="selectedCategory" class="flex flex-wrap gap-1.5">
+        <AddOccupation v-if="selectedCategory === NEW_CATEGORY" open @added="onOccupationAdded" @cancel="selectedCategory = null" />
+        <div v-else-if="selectedCategory" class="flex flex-wrap gap-1.5">
           <button
             v-for="o in tax.occupationsByCategory[selectedCategory] || []"
             :key="o.id"
@@ -137,6 +150,7 @@ const currentCities = computed(() => worker.profile?.operationCities ?? [])
             :class="selectedOccupationIds.includes(o.id) ? 'bg-brand text-white border-brand' : 'text-slate-600 hover:border-brand hover:text-brand'"
           >{{ o.name }}</button>
         </div>
+        <AddOccupation v-if="selectedCategory && selectedCategory !== NEW_CATEGORY" :category-id="selectedCategory" @added="onOccupationAdded" />
       </div>
 
       <!-- Current cities -->
