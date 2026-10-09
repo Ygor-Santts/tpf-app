@@ -194,5 +194,22 @@
     "toClient": "Switch to client mode",
     "toWorker": "Switch to worker mode",
     "becomeWorker": "I want to work too"
+  },
+  "visitor": {
+    "previewBanner": "You are viewing a preview. Create a free account to contact professionals.",
+    "signUp": "Sign up",
+    "signIn": "Sign in",
+    "haveAccount": "I have an account",
+    "seeContact": "See contact",
+    "promptTitle": "Create an account to contact {name}",
+    "promptTitleGeneric": "Create an account to contact professionals",
+    "promptText": "It's free and takes less than a minute. Then just message them on WhatsApp.",
+    "asClient": "I want to hire",
+    "asClientDesc": "Find and contact professionals near you.",
+    "asWorker": "I'm a professional",
+    "asWorkerDesc": "Show your work and get clients.",
+    "joinTitle": "Join Trampo Fácil",
+    "profileContact": "Sign in or create a free account to message this professional on WhatsApp.",
+    "bestHome": "Best in the field"
   }
 }

@@ -105,7 +105,15 @@ function switchMode() {
         Sair
       </button>
       <RouterLink
-        v-else
+        v-if="!auth.token"
+        to="/register-client"
+        class="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand text-white text-sm font-semibold hover:bg-brand-dark transition-colors"
+      >
+        <Icon icon="mdi:account-plus-outline" class="text-lg" />
+        {{ t('visitor.signUp') }}
+      </RouterLink>
+      <RouterLink
+        v-if="!auth.token"
         to="/login"
         class="flex items-center gap-2 text-sm text-brand hover:text-brand-dark transition-colors px-1 py-1"
       >

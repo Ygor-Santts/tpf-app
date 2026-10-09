@@ -21,11 +21,16 @@ auth.error = null
 
 const sessionExpired = computed(() => route.query.expired === '1')
 const accountDeleted = computed(() => route.query.deleted === '1')
+// Back to where a visitor was (e.g. a worker's profile), only within the app.
+const redirect = computed(() => {
+  const to = route.query.redirect
+  return typeof to === 'string' && to.startsWith('/') && !to.startsWith('//') ? to : null
+})
 
 async function submit() {
   if (!(await validate())) return
   if (await auth.login({ ...form, email: form.email.trim() })) {
-    router.replace(auth.home)
+    router.replace(auth.inWorkerMode ? auth.home : redirect.value ?? auth.home)
   }
 }
 </script>
