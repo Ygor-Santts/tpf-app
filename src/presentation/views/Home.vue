@@ -22,7 +22,7 @@ onMounted(async () => {
 
 // A taste of who is on the app. The section stays hidden when nobody qualifies.
 async function loadBest() {
-  try { best.value = (await searchWorkers({ sort: 'best', limit: 3 })).data }
+  try { best.value = (await searchWorkers({ sort: 'best', page: 1, limit: 3 })).data }
   catch { best.value = [] }
 }
 
