@@ -84,7 +84,20 @@
     "registerClient": "Client Registration",
     "registerClientSuccess": "Account created! Please log in to continue."
   },
-  "marketplace": { "categories": "Categories", "occupations": "Occupations", "category": "Category", "backToCategories": "Back to categories" },
+  "marketplace": {
+    "categories": "Categories",
+    "occupations": "Occupations",
+    "category": "Category",
+    "backToCategories": "Back to categories",
+    "categoriesHint": "Pick an area to see its professions and find who works near you.",
+    "seeOccupations": "See professions",
+    "occupationsHint": "Tap a profession to see who does that job near you.",
+    "allInCategory": "See all {category} professionals",
+    "noOccupations": "No professions in this category yet.",
+    "noOccupationsDesc": "Go back to categories and pick another area.",
+    "noCategories": "No categories yet.",
+    "noCategoriesDesc": "Use search to find professionals by name."
+  },
   "locales": { "states": "States", "cities": "Cities", "backToStates": "Back to states", "searchCity": "Search city...", "noCityFound": "No city found.", "typeToFindMore": "Type a name to find other cities." },
   "workers": {
     "findProfessionals": "Find Professionals",
