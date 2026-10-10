@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@app/stores/auth'
 import { Icon } from '@iconify/vue'
 import IconInput from '@ui/components/IconInput.vue'
-import { useValidation, required, email, phone, minLength, sameAs, formatPhone, phoneDigits, PASSWORD_MIN } from '@shared/validation'
+import { useValidation, required, email, fullName, squish, phone, minLength, sameAs, formatPhone, phoneDigits, PASSWORD_MIN } from '@shared/validation'
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -15,7 +15,7 @@ const form = reactive({ name: '', email: '', phone: '', password: '', confirm: '
 const success = ref(false)
 
 const { errors, check, validate, setErrors } = useValidation(form, {
-  name: [required('Informe seu nome.')],
+  name: [required('Informe seu nome e sobrenome.'), fullName],
   email: [required('Informe seu e-mail.'), email],
   phone: [required('Informe seu telefone.'), phone],
   password: [required('Crie uma senha.'), minLength(PASSWORD_MIN)],
@@ -27,7 +27,7 @@ watch(() => form.phone, (v) => (form.phone = formatPhone(v)))
 async function submit() {
   if (!(await validate())) return
   const ok = await auth.registerClient({
-    name: form.name.trim(),
+    name: squish(form.name),
     email: form.email.trim(),
     phone: phoneDigits(form.phone),
     password: form.password,
@@ -51,6 +51,7 @@ async function submit() {
           <Icon icon="mdi:check" class="text-green-500 text-3xl" />
         </div>
         <p class="text-slate-700 font-medium">Conta criada com sucesso!</p>
+        <p class="text-sm text-slate-500">Enviamos um link para <b>{{ form.email.trim() }}</b>. Abra o e-mail e clique no link para confirmar que ele é seu.</p>
         <button @click="router.push('/login')" class="w-full py-3 rounded-xl bg-brand text-white font-semibold hover:bg-brand-dark transition-colors">
           Fazer login
         </button>

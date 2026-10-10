@@ -7,6 +7,10 @@ export type Rule = (value: any) => string
 // DDD + 9 + 8 digits (mobile). Same rule as the API.
 const BR_PHONE = /^[1-9][0-9](9\d{8}|[2-5]\d{7})$/
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+// First name and last name: at least two words of letters (apostrophes and
+// hyphens allowed inside), the first and the last with 2+ letters, so
+// "Ana de Souza" passes and "Ana" or "Ana S" do not. Same rule as the API.
+const FULL_NAME = /^\p{L}[\p{L}'-]*\p{L}( \p{L}[\p{L}'-]*)* \p{L}[\p{L}'-]*\p{L}$/u
 
 export const PASSWORD_MIN = 8
 
@@ -14,6 +18,10 @@ const isEmpty = (v: unknown) => v == null || (typeof v === 'string' && !v.trim()
 
 export const required = (message = 'Campo obrigatório.'): Rule => (v) => (isEmpty(v) ? message : '')
 export const email: Rule = (v) => (isEmpty(v) || EMAIL.test(v.trim()) ? '' : 'Informe um e-mail válido.')
+// Trims and collapses repeated spaces: " ana   souza " -> "ana souza".
+export const squish = (v: string) => (v || '').trim().replace(/\s+/g, ' ')
+export const fullName: Rule = (v) =>
+  isEmpty(v) || FULL_NAME.test(squish(v)) ? '' : 'Informe nome e sobrenome, só com letras. Ex.: Ana Souza.'
 export const phone: Rule = (v) =>
   isEmpty(v) || BR_PHONE.test(phoneDigits(v)) ? '' : 'Telefone inválido. Ex.: (34) 99999-9999.'
 export const minLength = (n: number): Rule => (v) => (isEmpty(v) || v.length >= n ? '' : `Use pelo menos ${n} caracteres.`)
