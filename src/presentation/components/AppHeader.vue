@@ -93,6 +93,15 @@ function switchMode() {
             </RouterLink>
 
             <RouterLink
+              to="/ajuda"
+              @click="closeMenu"
+              class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              <Icon icon="mdi:help-circle-outline" class="text-lg text-slate-400" />
+              Ajuda e suporte
+            </RouterLink>
+
+            <RouterLink
               to="/privacidade"
               @click="closeMenu"
               class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
@@ -122,7 +131,16 @@ function switchMode() {
       </div>
 
       <RouterLink
-        v-else
+        v-if="!auth.token"
+        to="/ajuda"
+        aria-label="Ajuda e suporte"
+        class="h-8 w-8 flex items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 transition-colors"
+      >
+        <Icon icon="mdi:help-circle-outline" class="text-xl" />
+      </RouterLink>
+
+      <RouterLink
+        v-if="!auth.token"
         to="/login"
         class="text-xs font-medium text-brand hover:text-brand-dark transition-colors px-2 py-1"
       >

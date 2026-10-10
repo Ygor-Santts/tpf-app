@@ -10,6 +10,7 @@ const ForgotPassword = () => import('@ui/views/auth/ForgotPassword.vue')
 const ResetPassword = () => import('@ui/views/auth/ResetPassword.vue')
 const DeleteAccount = () => import('@ui/views/account/DeleteAccount.vue')
 const Privacy = () => import('@ui/views/Privacy.vue')
+const Support = () => import('@ui/views/Support.vue')
 const Categories = () => import('@ui/views/marketplace/Categories.vue')
 const Occupations = () => import('@ui/views/marketplace/Occupations.vue')
 const States = () => import('@ui/views/locales/States.vue')
@@ -31,6 +32,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/become-worker', component: RegisterWorker, props: { upgrade: true } },
   { path: '/delete-account', component: DeleteAccount },
   { path: '/privacidade', component: Privacy, meta: { public: true } },
+  { path: '/ajuda', component: Support, meta: { public: true } },
   {
     path: '/tabs',
     component: AppLayout,
