@@ -82,6 +82,10 @@ async function submit() {
           <RouterLink to="/register-client" class="text-brand font-medium hover:underline ml-1">{{ t('auth.createClientAccount') }}</RouterLink>
         </div>
       </div>
+
+      <p class="text-center text-xs text-slate-500 mt-4">
+        <RouterLink to="/ajuda" class="hover:text-brand transition-colors">Precisa de ajuda? Fale com a gente</RouterLink>
+      </p>
     </div>
   </div>
 </template>

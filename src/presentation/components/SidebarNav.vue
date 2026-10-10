@@ -109,6 +109,13 @@ function switchMode() {
           <option value="en">EN</option>
         </select>
       </div>
+      <RouterLink
+        to="/ajuda"
+        class="flex items-center gap-2 text-sm text-slate-500 hover:text-brand transition-colors px-1 py-1"
+      >
+        <Icon icon="mdi:lifebuoy" class="text-lg" />
+        Ajuda e suporte
+      </RouterLink>
       <button
         v-if="auth.token"
         @click="logout"

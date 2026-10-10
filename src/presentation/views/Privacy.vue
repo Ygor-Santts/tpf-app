@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
+import { SUPPORT_EMAIL } from '@shared/constants'
 
-// Contact channel the LGPD requires. Change it here only.
-const CONTACT_EMAIL = 'contato@trampofacil.com.br'
 const UPDATED_AT = '06/10/2026'
 
 const router = useRouter()
@@ -52,8 +51,13 @@ const router = useRouter()
       <p>Guardamos seus dados enquanto sua conta existir. Quando você exclui a conta, apagamos tudo na hora.</p>
 
       <h2 class="font-semibold text-slate-900">Seus direitos</h2>
-      <p>Se você é trabalhador, pode corrigir seus dados em <strong>Meu perfil</strong>. Para corrigir outros dados, escreva para o contato abaixo. Você pode excluir sua conta a qualquer momento em <strong>menu da conta → Excluir conta</strong>. Isso apaga sua conta, seu perfil, seu portfólio e as avaliações que você recebeu e escreveu.</p>
-      <p>Para qualquer dúvida ou pedido sobre seus dados, escreva para <a :href="`mailto:${CONTACT_EMAIL}`" class="text-brand font-medium hover:underline">{{ CONTACT_EMAIL }}</a>.</p>
+      <p>Se você é trabalhador, pode corrigir seus dados em <strong>Meu perfil</strong>. Para corrigir outros dados, fale com a gente pelo contato abaixo. Você pode excluir sua conta a qualquer momento em <strong>menu da conta → Excluir conta</strong>. Isso apaga sua conta, seu perfil, seu portfólio e as avaliações que você recebeu e escreveu.</p>
+      <!-- The contact channel the LGPD requires. -->
+      <p>
+        Para qualquer dúvida ou pedido sobre seus dados, mande uma mensagem em
+        <RouterLink to="/ajuda" class="text-brand font-medium hover:underline">Ajuda e suporte</RouterLink><template v-if="SUPPORT_EMAIL">
+          ou escreva para <a :href="`mailto:${SUPPORT_EMAIL}`" class="text-brand font-medium hover:underline">{{ SUPPORT_EMAIL }}</a></template>.
+      </p>
 
       <h2 class="font-semibold text-slate-900">Mudanças nesta política</h2>
       <p>Se esta política mudar, a data no topo será atualizada.</p>

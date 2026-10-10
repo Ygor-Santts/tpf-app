@@ -140,6 +140,10 @@ function startTour() {
           <p v-if="openFaq === i" class="px-4 pb-4 -mt-1 text-sm text-slate-600 leading-relaxed">{{ t(`help.faq.${f}.a`) }}</p>
         </div>
       </div>
+      <RouterLink to="/ajuda" class="justify-self-center flex items-center gap-1.5 text-sm text-brand font-medium hover:underline">
+        <Icon icon="mdi:lifebuoy" class="text-lg" />
+        Ainda com dúvida? Fale com a gente
+      </RouterLink>
     </div>
 
   </section>
