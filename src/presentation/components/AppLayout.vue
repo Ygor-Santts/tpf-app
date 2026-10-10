@@ -5,6 +5,7 @@ import SidebarNav from './SidebarNav.vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 import { useAuthStore } from '@app/stores/auth'
+import EmailVerifyBanner from './EmailVerifyBanner.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -35,6 +36,7 @@ const auth = useAuthStore()
             {{ t('visitor.signUp') }}
           </RouterLink>
         </div>
+        <EmailVerifyBanner v-if="auth.token" />
         <RouterView />
       </div>
     </main>

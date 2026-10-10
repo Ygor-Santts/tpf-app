@@ -12,7 +12,7 @@ import { Icon } from '@iconify/vue'
 import StepIndicator from '@ui/components/StepIndicator.vue'
 import IconInput from '@ui/components/IconInput.vue'
 import FieldError from '@ui/components/FieldError.vue'
-import { useValidation, required, email, phone, minLength, sameAs, formatPhone, phoneDigits, PASSWORD_MIN } from '@shared/validation'
+import { useValidation, required, email, fullName, squish, phone, minLength, sameAs, formatPhone, phoneDigits, PASSWORD_MIN } from '@shared/validation'
 
 // upgrade: a logged-in client adds a worker profile, so the personal-data step is skipped.
 const props = defineProps<{ upgrade?: boolean }>()
@@ -40,7 +40,7 @@ const form = reactive({
 })
 
 const { errors, check, validate, setErrors } = useValidation(form, {
-  name: [required('Informe seu nome.')],
+  name: [required('Informe seu nome e sobrenome.'), fullName],
   email: [required('Informe seu e-mail.'), email],
   phone: [required('Informe seu telefone.'), phone],
   password: [required('Crie uma senha.'), minLength(PASSWORD_MIN)],
@@ -108,7 +108,7 @@ async function submit() {
       operationCitiesIds: form.operationCitiesIds,
     })
     : await auth.registerWorker({
-      name: form.name.trim(),
+      name: squish(form.name),
       email: form.email.trim(),
       password: form.password,
       phone: phoneDigits(form.phone),
@@ -124,7 +124,7 @@ async function submit() {
   }
   if (props.upgrade) return router.replace('/worker/profile/edit')
   success.value = true
-  setTimeout(() => router.replace('/login'), 2000)
+  setTimeout(() => router.replace('/login'), 5000)
 }
 
 const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('auth.step3Label')].slice(firstStep - 1))
@@ -149,6 +149,7 @@ const steps = computed(() => [t('auth.step1Label'), t('auth.step2Label'), t('aut
             <Icon icon="mdi:check-circle" class="text-3xl text-green-500" />
           </div>
           <p class="font-semibold text-slate-800">{{ t('auth.registerSuccess') }}</p>
+          <p class="text-sm text-slate-500">Enviamos um link para <b>{{ form.email.trim() }}</b>. Abra o e-mail e clique no link para confirmar que ele é seu.</p>
         </div>
 
         <!-- Step 1: Dados pessoais -->
