@@ -224,5 +224,141 @@
     "joinTitle": "Join Trampo Fácil",
     "profileContact": "Sign in or create a free account to message this professional on WhatsApp.",
     "bestHome": "Best in the field"
+  },
+  "help": {
+    "nav": "How it works",
+    "learnMore": "Learn more",
+    "title": "How Trampo Fácil works",
+    "intro": "Trampo Fácil connects people who need a job done with professionals in the same area. You find, talk and agree on everything directly with them.",
+    "watchTour": "Watch the tutorial",
+    "goalsTitle": "Our goals",
+    "goals": {
+      "near": {
+        "title": "Find help near you",
+        "text": "Find builders, electricians, cleaners and other professionals in your city in a few taps."
+      },
+      "work": {
+        "title": "More work for local pros",
+        "text": "Help local professionals show what they do and win new clients."
+      },
+      "trust": {
+        "title": "Trust on both sides",
+        "text": "Photos of past work and real client ratings help you choose well."
+      }
+    },
+    "stepsTitle": "Step by step",
+    "client": {
+      "step1": {
+        "title": "Search for the service",
+        "text": "Look for what you need and pick your city. You can also browse by category."
+      },
+      "step2": {
+        "title": "Check the profile",
+        "text": "See photos of their work, where they work and what other clients said."
+      },
+      "step3": {
+        "title": "Message on WhatsApp",
+        "text": "With your free account, talk to the professional directly and agree on price and date."
+      },
+      "step4": {
+        "title": "Rate after the job",
+        "text": "Your rating helps others choose and rewards good work."
+      },
+      "ctaIn": "Find professionals",
+      "ctaOut": "Create my free account"
+    },
+    "worker": {
+      "step1": {
+        "title": "Sign up",
+        "text": "Tell us what you do and which cities you work in. If your trade is missing, you can suggest it."
+      },
+      "step2": {
+        "title": "Polish your profile",
+        "text": "Write a little about yourself and your experience. A complete profile builds trust."
+      },
+      "step3": {
+        "title": "Show your work",
+        "text": "Add photos and videos of jobs you have done to your portfolio."
+      },
+      "step4": {
+        "title": "Get clients",
+        "text": "Clients message you on WhatsApp. With 3 or more good ratings you can appear in \"Best in the field\"."
+      },
+      "ctaWorker": "Go to my dashboard",
+      "ctaOut": "Sign up as a professional"
+    },
+    "faqTitle": "Common questions",
+    "faq": {
+      "account": {
+        "q": "Do I need an account to see professionals?",
+        "a": "No. Browse freely. You only need an account to see a professional's contact, and it is free."
+      },
+      "contact": {
+        "q": "How do I talk to a professional?",
+        "a": "On their profile, tap \"See contact\" to message them on WhatsApp. You agree on everything directly."
+      },
+      "price": {
+        "q": "How much does a job cost?",
+        "a": "You and the professional agree on the price. Trampo Fácil just helps you find each other."
+      },
+      "ratings": {
+        "q": "How do ratings work?",
+        "a": "After the job, the client gives a score from 1 to 5 and can leave a comment. Scores show on the professional's profile."
+      },
+      "best": {
+        "q": "What is \"Best in the field\"?",
+        "a": "The list of the best-rated professionals. It takes at least 3 ratings to get in."
+      },
+      "both": {
+        "q": "Can I hire and work with the same account?",
+        "a": "Yes. Clients can become professionals from the menu, and professionals can switch between both modes."
+      },
+      "review": {
+        "q": "What does \"under review\" mean?",
+        "a": "When a professional suggests a new category or trade, it shows as \"under review\" until our team checks it."
+      }
+    },
+    "tour": {
+      "skip": "Skip",
+      "next": "Next",
+      "done": "Get started",
+      "signUp": "Create free account",
+      "client": {
+        "welcome": {
+          "title": "Welcome to Trampo Fácil!",
+          "text": "Find local professionals for building, repairs, cleaning, gardening and more."
+        },
+        "search": {
+          "title": "Search for what you need",
+          "text": "Pick the service and the city. See photos of their work and other clients' ratings."
+        },
+        "contact": {
+          "title": "Talk directly on WhatsApp",
+          "text": "With your free account, message the professional and agree on price and date."
+        },
+        "rate": {
+          "title": "Rate afterwards",
+          "text": "Your rating helps others choose well. You can see this tutorial again in \"How it works\"."
+        }
+      },
+      "worker": {
+        "welcome": {
+          "title": "Welcome, professional!",
+          "text": "Trampo Fácil shows your work to clients in your city."
+        },
+        "profile": {
+          "title": "Complete your profile",
+          "text": "Say what you do, where you work and a little about yourself."
+        },
+        "portfolio": {
+          "title": "Show your work",
+          "text": "Add photos and videos to your portfolio. It is what convinces clients most."
+        },
+        "ratings": {
+          "title": "Earn ratings",
+          "text": "Clients message you on WhatsApp. With good ratings you appear in \"Best in the field\"."
+        }
+      }
+    }
   }
 }
