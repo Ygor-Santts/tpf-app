@@ -10,6 +10,7 @@ const ForgotPassword = () => import('@ui/views/auth/ForgotPassword.vue')
 const ResetPassword = () => import('@ui/views/auth/ResetPassword.vue')
 const DeleteAccount = () => import('@ui/views/account/DeleteAccount.vue')
 const Privacy = () => import('@ui/views/Privacy.vue')
+const HowItWorks = () => import('@ui/views/HowItWorks.vue')
 const Categories = () => import('@ui/views/marketplace/Categories.vue')
 const Occupations = () => import('@ui/views/marketplace/Occupations.vue')
 const States = () => import('@ui/views/locales/States.vue')
@@ -36,6 +37,7 @@ const routes: RouteRecordRaw[] = [
     component: AppLayout,
     children: [
       { path: 'home', component: Home, meta: { public: true } },
+      { path: 'como-funciona', component: HowItWorks, meta: { public: true } },
       // Browsing is open to visitors as a preview; contacting needs an account.
       { path: 'categories', component: Categories, meta: { public: true } },
       { path: 'categories/:categoryId/occupations', component: Occupations, props: true, meta: { public: true } },

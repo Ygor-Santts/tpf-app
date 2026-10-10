@@ -211,5 +211,141 @@
     "joinTitle": "Faça parte do Trampo Fácil",
     "profileContact": "Entre ou crie sua conta grátis para chamar este profissional no WhatsApp.",
     "bestHome": "Melhores no ramo"
+  },
+  "help": {
+    "nav": "Como funciona",
+    "learnMore": "Saiba mais",
+    "title": "Como o Trampo Fácil funciona",
+    "intro": "O Trampo Fácil liga quem precisa de um serviço a profissionais da mesma região. Você encontra, conversa e combina tudo direto com a pessoa, sem complicação.",
+    "watchTour": "Ver o tutorial",
+    "goalsTitle": "Nossos objetivos",
+    "goals": {
+      "near": {
+        "title": "Achar ajuda perto de você",
+        "text": "Encontrar pedreiro, eletricista, diarista e outros profissionais na sua cidade em poucos toques."
+      },
+      "work": {
+        "title": "Dar mais trabalho a quem faz",
+        "text": "Ajudar o profissional da região a mostrar o que sabe fazer e conseguir novos clientes."
+      },
+      "trust": {
+        "title": "Confiança nas duas pontas",
+        "text": "Fotos dos trabalhos e avaliações reais de clientes ajudam você a escolher bem."
+      }
+    },
+    "stepsTitle": "Passo a passo",
+    "client": {
+      "step1": {
+        "title": "Busque o serviço",
+        "text": "Procure pelo que você precisa e escolha a sua cidade. Também dá para olhar por categoria."
+      },
+      "step2": {
+        "title": "Veja o perfil",
+        "text": "Confira as fotos dos trabalhos, onde a pessoa atende e o que outros clientes acharam."
+      },
+      "step3": {
+        "title": "Chame no WhatsApp",
+        "text": "Com sua conta grátis, você fala direto com o profissional e combina preço e data."
+      },
+      "step4": {
+        "title": "Avalie depois do serviço",
+        "text": "Sua nota ajuda outras pessoas a escolher e valoriza quem trabalha bem."
+      },
+      "ctaIn": "Buscar profissionais",
+      "ctaOut": "Criar minha conta grátis"
+    },
+    "worker": {
+      "step1": {
+        "title": "Crie seu cadastro",
+        "text": "Diga o que você faz e em quais cidades atende. Se sua profissão não estiver na lista, você pode sugerir."
+      },
+      "step2": {
+        "title": "Capriche no perfil",
+        "text": "Escreva um pouco sobre você e sua experiência. Um perfil completo passa mais confiança."
+      },
+      "step3": {
+        "title": "Mostre seu trabalho",
+        "text": "Coloque fotos e vídeos de serviços que você já fez no seu portfólio."
+      },
+      "step4": {
+        "title": "Receba clientes",
+        "text": "Os clientes chamam você no WhatsApp. Com 3 ou mais boas avaliações, você pode aparecer em \"Melhores no ramo\"."
+      },
+      "ctaWorker": "Ir para o meu painel",
+      "ctaOut": "Quero me cadastrar como profissional"
+    },
+    "faqTitle": "Dúvidas comuns",
+    "faq": {
+      "account": {
+        "q": "Preciso de conta para ver os profissionais?",
+        "a": "Não. Você pode olhar à vontade. A conta só é pedida na hora de ver o contato do profissional, e criar é grátis."
+      },
+      "contact": {
+        "q": "Como eu falo com o profissional?",
+        "a": "No perfil dele, toque em \"Ver contato\" para chamar no WhatsApp. Vocês combinam tudo direto, sem intermediário."
+      },
+      "price": {
+        "q": "Quanto custa o serviço?",
+        "a": "O valor é combinado entre você e o profissional. O Trampo Fácil só ajuda vocês a se encontrarem."
+      },
+      "ratings": {
+        "q": "Como funcionam as avaliações?",
+        "a": "Depois do serviço, o cliente dá uma nota de 1 a 5 e pode deixar um comentário. As notas aparecem no perfil do profissional."
+      },
+      "best": {
+        "q": "O que é \"Melhores no ramo\"?",
+        "a": "É a lista dos profissionais mais bem avaliados. Para entrar, é preciso ter pelo menos 3 avaliações."
+      },
+      "both": {
+        "q": "Posso contratar e trabalhar com a mesma conta?",
+        "a": "Pode. Quem contrata pode virar profissional pelo menu, e o profissional troca entre os dois modos quando quiser."
+      },
+      "review": {
+        "q": "O que quer dizer \"em análise\"?",
+        "a": "Quando um profissional sugere uma categoria ou profissão nova, ela aparece como \"em análise\" até a nossa equipe conferir."
+      }
+    },
+    "tour": {
+      "skip": "Pular",
+      "next": "Próximo",
+      "done": "Começar",
+      "signUp": "Criar conta grátis",
+      "client": {
+        "welcome": {
+          "title": "Bem-vindo ao Trampo Fácil!",
+          "text": "Aqui você encontra profissionais da sua região para obras, reparos, limpeza, jardinagem e muito mais."
+        },
+        "search": {
+          "title": "Busque o que precisa",
+          "text": "Escolha o serviço e a cidade. Veja fotos dos trabalhos e as avaliações de outros clientes."
+        },
+        "contact": {
+          "title": "Fale direto no WhatsApp",
+          "text": "Com sua conta grátis, você chama o profissional e combina preço e data direto com ele."
+        },
+        "rate": {
+          "title": "Avalie depois",
+          "text": "Sua nota ajuda outras pessoas a escolher bem. Você pode rever este tutorial em \"Como funciona\"."
+        }
+      },
+      "worker": {
+        "welcome": {
+          "title": "Bem-vindo, profissional!",
+          "text": "O Trampo Fácil mostra o seu trabalho para clientes da sua cidade."
+        },
+        "profile": {
+          "title": "Complete seu perfil",
+          "text": "Diga o que você faz, onde atende e conte um pouco sobre você."
+        },
+        "portfolio": {
+          "title": "Mostre seus trabalhos",
+          "text": "Coloque fotos e vídeos no portfólio. É o que mais convence um cliente."
+        },
+        "ratings": {
+          "title": "Ganhe avaliações",
+          "text": "Os clientes chamam você no WhatsApp. Com boas avaliações, você aparece em \"Melhores no ramo\"."
+        }
+      }
+    }
   }
 }

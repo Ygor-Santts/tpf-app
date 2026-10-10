@@ -68,6 +68,19 @@ function switchMode() {
         {{ item.label }}
       </RouterLink>
 
+      <div class="mt-2 pt-2 border-t">
+        <RouterLink
+          to="/tabs/como-funciona"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors"
+          :class="isActive('/tabs/como-funciona')
+            ? 'bg-brand-50 text-brand'
+            : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'"
+        >
+          <Icon icon="mdi:help-circle-outline" class="text-xl flex-shrink-0" />
+          {{ t('help.nav') }}
+        </RouterLink>
+      </div>
+
       <div v-if="auth.token" class="mt-2 pt-2 border-t">
         <button
           v-if="auth.isWorker"
