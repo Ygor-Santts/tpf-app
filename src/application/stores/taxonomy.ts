@@ -63,7 +63,9 @@ export const useTaxonomyStore = defineStore('taxonomy', {
       if (this.occupationsByCategory[categoryId]) return
       try {
         this.loading = true
-        this.occupationsByCategory[categoryId] = await getOccupationsByCategory(categoryId)
+        const list = await getOccupationsByCategory(categoryId)
+        // The API answers with an error object, not a list, when the category has none.
+        this.occupationsByCategory[categoryId] = Array.isArray(list) ? list : []
       } catch (e: any) {
         this.error = e?.response?.data?.message || 'Failed to load occupations'
       } finally {

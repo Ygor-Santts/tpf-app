@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import IconInput from '@ui/components/IconInput.vue'
 import FieldError from '@ui/components/FieldError.vue'
 import { useAuthStore } from '@app/stores/auth'
-import { sendSupportMessage, type SupportMessageDTO } from '@infra/services/support.service'
+import { sendSupportMessage, supportAvailable, type SupportMessageDTO } from '@infra/services/support.service'
 import { useValidation, required, email, minLength, apiError } from '@shared/validation'
 import { SUPPORT_EMAIL } from '@shared/constants'
 
@@ -68,6 +68,11 @@ const { errors, check, validate, setErrors } = useValidation(form, {
 })
 const loading = ref(false)
 const sent = ref(false)
+// Assume the form works unless the API says it has nowhere to send.
+const available = ref(true)
+onMounted(async () => {
+  try { available.value = await supportAvailable() } catch { /* keep the form */ }
+})
 const error = ref('')
 
 async function submit() {
@@ -124,7 +129,12 @@ function sendAnother() {
           Fale com a gente
         </h2>
 
-        <div v-if="sent" class="grid gap-3">
+        <p v-if="!available" class="flex items-start gap-2 p-3 bg-slate-50 border rounded-xl text-sm text-slate-600">
+          <Icon icon="mdi:clock-outline" class="text-lg flex-shrink-0" />
+          O envio de mensagens estará disponível em breve. Enquanto isso, veja as perguntas acima.
+        </p>
+
+        <div v-else-if="sent" class="grid gap-3">
           <div class="flex items-start gap-2 p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm">
             <Icon icon="mdi:check-circle" class="text-lg flex-shrink-0" />
             <p>Mensagem enviada! Vamos responder no e-mail <strong>{{ form.email }}</strong>. Fique de olho também na caixa de spam.</p>

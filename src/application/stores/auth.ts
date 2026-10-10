@@ -49,6 +49,12 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('tpf_token', access_token)
       localStorage.setItem('tpf_user', JSON.stringify(user))
     },
+    // Keeps the saved copy of the user in step with what the API says.
+    updateUser(changes: Partial<UserProfile>) {
+      if (!this.user) return
+      this.user = { ...this.user, ...changes }
+      localStorage.setItem('tpf_user', JSON.stringify(this.user))
+    },
     fail(e: unknown, fallback: string) {
       const { message, fields } = apiError(e, fallback)
       this.error = message

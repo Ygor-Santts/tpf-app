@@ -22,7 +22,7 @@ onMounted(async () => {
 
 // A taste of who is on the app. The section stays hidden when nobody qualifies.
 async function loadBest() {
-  try { best.value = (await searchWorkers({ sort: 'best', limit: 3 })).data }
+  try { best.value = (await searchWorkers({ sort: 'best', page: 1, limit: 3 })).data }
   catch { best.value = [] }
 }
 
@@ -138,7 +138,10 @@ const steps = [
 
     <!-- Como funciona -->
     <div class="grid gap-4">
-      <h2 class="font-bold text-slate-900">{{ t('home.howItWorks') }}</h2>
+      <div class="flex items-center justify-between">
+        <h2 class="font-bold text-slate-900">{{ t('home.howItWorks') }}</h2>
+        <RouterLink to="/tabs/como-funciona" class="text-xs text-brand font-medium hover:underline">{{ t('help.learnMore') }}</RouterLink>
+      </div>
       <div class="grid gap-3">
         <div
           v-for="(step, i) in steps"

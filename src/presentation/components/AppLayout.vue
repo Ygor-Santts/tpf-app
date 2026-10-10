@@ -2,12 +2,20 @@
 import AppHeader from './AppHeader.vue'
 import BottomNav from './BottomNav.vue'
 import SidebarNav from './SidebarNav.vue'
+import OnboardingTour from './OnboardingTour.vue'
+import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 import { useAuthStore } from '@app/stores/auth'
+import { useTourStore } from '@app/stores/tour'
+import EmailVerifyBanner from './EmailVerifyBanner.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+const tour = useTourStore()
+
+// First visit to each side of the app opens the tutorial once.
+watch(() => auth.inWorkerMode, (worker) => tour.showIfNew(worker ? 'worker' : 'client'), { immediate: true })
 </script>
 
 <template>
@@ -35,11 +43,14 @@ const auth = useAuthStore()
             {{ t('visitor.signUp') }}
           </RouterLink>
         </div>
+        <EmailVerifyBanner v-if="auth.token" />
         <RouterView />
       </div>
     </main>
 
     <!-- Mobile bottom nav -->
     <BottomNav class="lg:hidden" />
+
+    <OnboardingTour />
   </div>
 </template>

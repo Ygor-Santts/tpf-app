@@ -2,6 +2,8 @@ export interface LoginDTO { email: string; password: string }
 
 export interface UserProfile {
   id: number; name: string; email: string; phone: string;
+  // Missing on sessions saved before email confirmation existed.
+  emailVerified?: boolean;
   isWorker: boolean; workerId?: number;
 }
 

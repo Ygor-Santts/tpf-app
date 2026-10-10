@@ -35,6 +35,15 @@ function switchMode() {
     </RouterLink>
 
     <div class="flex items-center gap-2">
+      <RouterLink
+        to="/tabs/como-funciona"
+        :aria-label="t('help.nav')"
+        :title="t('help.nav')"
+        class="h-8 w-8 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-brand transition-colors"
+      >
+        <Icon icon="mdi:help-circle-outline" class="text-xl" />
+      </RouterLink>
+
       <select v-model="locale" class="text-xs border rounded-lg px-2 py-1 cursor-pointer bg-white text-slate-600">
         <option value="pt-BR">PT-BR</option>
         <option value="en">EN</option>
@@ -97,7 +106,7 @@ function switchMode() {
               @click="closeMenu"
               class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
             >
-              <Icon icon="mdi:help-circle-outline" class="text-lg text-slate-400" />
+              <Icon icon="mdi:lifebuoy" class="text-lg text-slate-400" />
               Ajuda e suporte
             </RouterLink>
 
@@ -129,15 +138,6 @@ function switchMode() {
           </div>
         </Transition>
       </div>
-
-      <RouterLink
-        v-if="!auth.token"
-        to="/ajuda"
-        aria-label="Ajuda e suporte"
-        class="h-8 w-8 flex items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 transition-colors"
-      >
-        <Icon icon="mdi:help-circle-outline" class="text-xl" />
-      </RouterLink>
 
       <RouterLink
         v-if="!auth.token"
