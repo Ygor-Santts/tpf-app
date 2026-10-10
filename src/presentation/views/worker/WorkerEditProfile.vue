@@ -7,7 +7,7 @@ import { useWorkerStore } from '@app/stores/worker'
 import { useTaxonomyStore } from '@app/stores/taxonomy'
 import { Icon } from '@iconify/vue'
 import FieldError from '@ui/components/FieldError.vue'
-import { useValidation, required, phone, formatPhone, phoneDigits } from '@shared/validation'
+import { useValidation, required, fullName, squish, phone, formatPhone, phoneDigits } from '@shared/validation'
 
 const worker = useWorkerStore()
 const tax = useTaxonomyStore()
@@ -20,7 +20,8 @@ const selectedState = ref('')
 const saved = ref(false)
 
 const { errors, check, validate, setErrors } = useValidation(form, {
-  name: [required('Informe seu nome.')],
+  // A name saved before the full-name rule can stay as it is until changed.
+  name: [required('Informe seu nome e sobrenome.'), (v) => (squish(v) === worker.profile?.user.name ? '' : fullName(v))],
   phone: [required('Informe seu telefone.'), phone],
 })
 
@@ -66,7 +67,7 @@ async function save() {
   saved.value = false
   if (!(await validate())) return
   const dto: any = {}
-  const newName = form.name.trim()
+  const newName = squish(form.name)
   const newPhone = phoneDigits(form.phone)
   if (form.bio !== (worker.profile?.bio ?? '')) dto.bio = form.bio
   if (newName !== worker.profile?.user.name) dto.name = newName

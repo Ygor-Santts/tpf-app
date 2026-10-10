@@ -8,6 +8,7 @@ const RegisterWorker = () => import('@ui/views/auth/RegisterWorker.vue')
 const RegisterClient = () => import('@ui/views/auth/RegisterClient.vue')
 const ForgotPassword = () => import('@ui/views/auth/ForgotPassword.vue')
 const ResetPassword = () => import('@ui/views/auth/ResetPassword.vue')
+const VerifyEmail = () => import('@ui/views/auth/VerifyEmail.vue')
 const DeleteAccount = () => import('@ui/views/account/DeleteAccount.vue')
 const Privacy = () => import('@ui/views/Privacy.vue')
 const HowItWorks = () => import('@ui/views/HowItWorks.vue')
@@ -29,6 +30,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/register-client', component: RegisterClient, meta: { public: true } },
   { path: '/forgot-password', component: ForgotPassword, meta: { public: true } },
   { path: '/reset-password', component: ResetPassword, meta: { public: true } },
+  { path: '/verify-email', component: VerifyEmail, meta: { public: true } },
   { path: '/become-worker', component: RegisterWorker, props: { upgrade: true } },
   { path: '/delete-account', component: DeleteAccount },
   { path: '/privacidade', component: Privacy, meta: { public: true } },

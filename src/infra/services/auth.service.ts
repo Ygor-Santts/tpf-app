@@ -35,3 +35,11 @@ export async function resetPassword(token: string, password: string): Promise<vo
 export async function deleteAccount(password: string): Promise<void> {
   await api.delete('/auth/me', { data: { password } })
 }
+
+export async function verifyEmail(token: string): Promise<void> {
+  await api.post('/auth/verify-email', { token })
+}
+
+export async function resendEmailVerification(): Promise<void> {
+  await api.post('/auth/verify-email/resend')
+}

@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 import { useAuthStore } from '@app/stores/auth'
 import { useTourStore } from '@app/stores/tour'
+import EmailVerifyBanner from './EmailVerifyBanner.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -42,6 +43,7 @@ watch(() => auth.inWorkerMode, (worker) => tour.showIfNew(worker ? 'worker' : 'c
             {{ t('visitor.signUp') }}
           </RouterLink>
         </div>
+        <EmailVerifyBanner v-if="auth.token" />
         <RouterView />
       </div>
     </main>
