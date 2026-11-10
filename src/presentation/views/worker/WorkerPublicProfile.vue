@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { mediaUrl } from '@infra/http'
 import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '@app/stores/auth'
 import { getWorkerPortfolio, getWorkerRatings, getWorkerRatingSummary, submitRating } from '@infra/services/profile.service'
@@ -7,6 +6,7 @@ import { api } from '@infra/http'
 import { Icon } from '@iconify/vue'
 import StarRating from '@ui/components/StarRating.vue'
 import FeaturedBadge from '@ui/components/FeaturedBadge.vue'
+import PortfolioGallery from '@ui/components/PortfolioGallery.vue'
 import type { PortfolioItem, Rating, RatingSummary } from '@domain/worker'
 import { formatPhone, whatsappUrl } from '@shared/validation'
 import { useRoute } from 'vue-router'
@@ -156,14 +156,9 @@ async function sendRating() {
       </div>
 
       <!-- Portfolio -->
-      <div v-if="portfolio.length" class="grid gap-3">
+      <div v-if="portfolio.length" class="grid gap-2">
         <h3 class="font-semibold text-slate-800">Portfólio</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <div v-for="item in portfolio" :key="item.id" class="rounded-2xl overflow-hidden border aspect-square bg-slate-100">
-            <video v-if="item.type === 'video'" :src="mediaUrl(item.url)" class="w-full h-full object-cover" controls />
-            <img v-else :src="mediaUrl(item.url)" :alt="item.caption" class="w-full h-full object-cover" />
-          </div>
-        </div>
+        <PortfolioGallery :items="portfolio" :limit="6" />
       </div>
 
       <!-- Ratings -->
