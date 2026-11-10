@@ -83,6 +83,14 @@ defineProps<{
         <Icon icon="mdi:whatsapp" class="text-base" />
         {{ t('visitor.seeContact') }}
       </button>
+      <!-- The API sends the phone only once the email is confirmed -->
+      <p
+        v-else-if="auth.user?.emailVerified === false"
+        class="flex-1 flex items-center justify-center gap-1 py-2.5 px-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs text-center"
+      >
+        <Icon icon="mdi:email-alert-outline" class="text-base flex-shrink-0" />
+        {{ t('visitor.confirmEmailContact') }}
+      </p>
       <a
         v-else-if="phone && whatsappUrl(phone, name)"
         :href="whatsappUrl(phone, name)"

@@ -6,7 +6,8 @@ import { getMe, resendEmailVerification } from '@infra/services/auth.service'
 import { apiError } from '@shared/validation'
 
 // Reminds a signed-in person to confirm their email, with a button to get
-// the link again. Nothing in the app is blocked while it is not confirmed.
+// the link again. Until it is confirmed, workers' phones stay hidden and
+// rating is off (the API requires it).
 const auth = useAuthStore()
 const state = reactive({ sending: false, sent: false, error: '' })
 
@@ -42,7 +43,7 @@ async function resend() {
     <p class="flex-1 min-w-[12rem] text-xs sm:text-sm text-slate-700">
       <template v-if="state.sent">Enviamos um novo link para <b>{{ auth.user.email }}</b>. Confira também a caixa de spam.</template>
       <template v-else-if="state.error">{{ state.error }}</template>
-      <template v-else>Confirme seu e-mail: clique no link que enviamos para <b>{{ auth.user.email }}</b>.</template>
+      <template v-else>Confirme seu e-mail para ver o contato dos profissionais e avaliar: clique no link que enviamos para <b>{{ auth.user.email }}</b>.</template>
     </p>
     <button
       v-if="!state.sent"
