@@ -223,6 +223,9 @@
     "asWorkerDesc": "Show your work and get clients.",
     "joinTitle": "Join Trampo Fácil",
     "profileContact": "Sign in or create a free account to message this professional on WhatsApp.",
+    "confirmEmailContact": "Confirm your email to see the contact.",
+    "confirmEmailProfile": "Confirm your email to contact this professional. Open the link we sent when you signed up, or ask for another one in the notice at the top of the screen.",
+    "confirmEmailRate": "Confirm your email to rate this professional.",
     "bestHome": "Best in the field"
   },
   "help": {

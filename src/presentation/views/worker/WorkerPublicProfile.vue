@@ -47,7 +47,8 @@ onMounted(async () => {
 })
 
 const isOwnProfile = computed(() => auth.user?.workerId === Number(props.id))
-const canRate = computed(() => auth.token && !isOwnProfile.value && !submitted.value)
+// Rating needs a confirmed email; the API refuses it otherwise.
+const canRate = computed(() => auth.token && auth.user?.emailVerified !== false && !isOwnProfile.value && !submitted.value)
 
 const occupations = computed(() =>
   worker.value?.jobOccupations?.map((o: any) => o.name) ?? []
@@ -129,6 +130,11 @@ async function sendRating() {
           </RouterLink>
         </div>
       </div>
+      <!-- The API sends the phone only once the email is confirmed -->
+      <div v-else-if="auth.user?.emailVerified === false" class="flex items-start gap-2 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
+        <Icon icon="mdi:email-alert-outline" class="text-lg flex-shrink-0" />
+        {{ t('visitor.confirmEmailProfile') }}
+      </div>
       <div v-else-if="worker.user?.phone" class="grid gap-2">
         <a
           v-if="whatsappUrl(worker.user.phone, worker.user.name)"
@@ -188,6 +194,7 @@ async function sendRating() {
         <textarea
           v-model="ratingComment"
           rows="3"
+          maxlength="1000"
           placeholder="Deixe um comentário (opcional)"
           class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand-100 resize-none"
         />
@@ -205,6 +212,10 @@ async function sendRating() {
       <div v-else-if="submitted" class="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-2xl text-green-700 text-sm">
         <Icon icon="mdi:check-circle-outline" />
         Obrigado pela sua avaliação!
+      </div>
+
+      <div v-else-if="auth.token && auth.user?.emailVerified === false && !isOwnProfile" class="p-4 bg-slate-50 rounded-2xl text-sm text-slate-600 text-center">
+        {{ t('visitor.confirmEmailRate') }}
       </div>
 
       <div v-else-if="!auth.token" class="p-4 bg-slate-50 rounded-2xl text-sm text-slate-600 text-center">
