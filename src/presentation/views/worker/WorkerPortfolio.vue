@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { mediaUrl } from '@infra/http'
 import { ref, onMounted } from 'vue'
 import { useWorkerStore } from '@app/stores/worker'
 import { Icon } from '@iconify/vue'
+import PortfolioGallery from '@ui/components/PortfolioGallery.vue'
 
 const worker = useWorkerStore()
 const fileInput = ref<HTMLInputElement>()
 const caption = ref('')
 const uploading = ref(false)
 const uploadError = ref('')
-const confirmDeleteId = ref<number | null>(null)
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50 MB
 
@@ -37,7 +36,6 @@ async function onFileChange(event: Event) {
 
 async function remove(id: number) {
   await worker.deleteItem(id)
-  confirmDeleteId.value = null
 }
 </script>
 
@@ -76,35 +74,6 @@ async function remove(id: number) {
       <p>Nenhum trabalho no portfólio ainda.</p>
     </div>
 
-    <div v-else class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-      <div
-        v-for="item in worker.portfolio"
-        :key="item.id"
-        class="relative group rounded-2xl overflow-hidden border bg-slate-100"
-      >
-        <video v-if="item.type === 'video'" :src="mediaUrl(item.url)" class="w-full aspect-square object-cover" />
-        <img v-else :src="mediaUrl(item.url)" :alt="item.caption" class="w-full aspect-square object-cover" />
-
-        <!-- Hover overlay — trash trigger -->
-        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-          <button @click.stop="confirmDeleteId = item.id" class="h-10 w-10 rounded-full bg-white/90 flex items-center justify-center hover:bg-red-50">
-            <Icon icon="mdi:trash-can-outline" class="text-red-500 text-xl" />
-          </button>
-        </div>
-
-        <!-- Inline confirm overlay -->
-        <div v-if="confirmDeleteId === item.id" class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 p-3">
-          <p class="text-white text-xs text-center font-medium">Remover este item?</p>
-          <div class="flex gap-2">
-            <button @click="remove(item.id)" class="px-3 py-1.5 bg-red-500 text-white text-xs rounded-lg font-medium hover:bg-red-600">Remover</button>
-            <button @click="confirmDeleteId = null" class="px-3 py-1.5 bg-white/20 text-white text-xs rounded-lg hover:bg-white/30">Cancelar</button>
-          </div>
-        </div>
-
-        <div v-if="item.caption" class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2">
-          <p class="text-white text-xs truncate">{{ item.caption }}</p>
-        </div>
-      </div>
-    </div>
+    <PortfolioGallery v-else :items="worker.portfolio" editable @remove="remove" />
   </section>
 </template>
